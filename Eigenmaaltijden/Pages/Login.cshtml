@@ -1,0 +1,32 @@
+﻿@page
+@model Eigenmaaltijden.Pages.LoginModel
+@{
+}
+
+
+<!-- Login Card -->
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card bg-primary border">
+            <div class="card-header bg-primary text-light"><b>Login to Happy Brides</b></div>
+            <div class="card-body bg-light">
+
+                <!-- Login Form -->
+                <form method="post" asp-page="Login" asp-page-handler="login">
+                    <div class="container-fluid col-11 text-secondary">
+                        <label for="email_address" style="margin-top: 2%;"><b>Username</b></label>
+                        <input type="text" class="form-control" placeholder="John" asp-for="@Model.Email" required autofocus>
+
+                        <label for="password" style="margin-top: 5%;"><b>Password</b></label>
+                        <input type="password" class="form-control" placeholder="********" asp-for="@Model.Password" required>
+
+                        <br />
+                        <input type="submit" value="Login" />
+                        <p class="text-danger"><b></b></p>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

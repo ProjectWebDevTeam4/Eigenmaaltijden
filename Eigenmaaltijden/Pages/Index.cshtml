@@ -5,5 +5,12 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welkom op EigenMaaltijd</h1>
+    @if (Model.isLoggedIn == true)
+    {
+        <h1 class="display-4">Welkom @Model.getName()</h1>
+    }
+    else
+    {
+        <h1 class="display-4">Welkom op EigenMaaltijd</h1>
+    }
 </div>
