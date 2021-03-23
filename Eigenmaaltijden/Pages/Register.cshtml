@@ -1,5 +1,5 @@
 ﻿@page
-@model Eigenmaaltijden.Pages.LoginModel
+@model Eigenmaaltijden.Pages.RegisterModel
 @{
 }
 
@@ -12,17 +12,27 @@
             <div class="card-body bg-light">
 
                 <!-- Login Form -->
-                <form method="post" asp-page="Login" asp-page-handler="login">
+                <form method="post" asp-page="Register" asp-page-handler="register">
                     <div class="container-fluid col-11 text-secondary">
-                        <label for="email_address" style="margin-top: 2%;"><b>Username</b></label>
+                        <label for="email_address" style="margin-top: 2%;"><b>Name</b></label>
+                        <input type="text" class="form-control" placeholder="John" asp-for="@Model.Name" required autofocus>
+
+                        <label for="email_address" style="margin-top: 2%;"><b>E-mail</b></label>
                         <input type="text" class="form-control" placeholder="John" asp-for="@Model.Email" required autofocus>
 
                         <label for="password" style="margin-top: 5%;"><b>Password</b></label>
                         <input type="password" class="form-control" placeholder="********" asp-for="@Model.Password" required>
 
+                        <label for="password" style="margin-top: 5%;"><b>Confirm Password</b></label>
+                        <input type="password" class="form-control" placeholder="********" asp-for="@Model.ConfirmPassword" required>
+
+                        <label><b>I Accept the <a target="_blank" asp-page="/TOS">Terms Of Service</a></b></label>
+                        <input type="checkbox" asp-for="@Model.AcceptedTOS" />
                         <br />
                         <input type="submit" value="Login" class="btn bg-primary text-light" />
                         <p class="text-danger"><b>@Model.ErrorMessage</b></p>
+
+
                     </div>
                 </form>
 
