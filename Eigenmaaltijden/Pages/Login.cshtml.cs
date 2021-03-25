@@ -20,6 +20,8 @@ namespace Eigenmaaltijden.Pages
         [BindProperty]
         public string Password { get; set; }
 
+        public string ErrorMessage = "";
+
         Database db = new wwwroot.includes.Database();
 
         public void OnGet()
