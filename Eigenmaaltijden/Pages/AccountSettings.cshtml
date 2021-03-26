@@ -1,0 +1,36 @@
+﻿@page
+@model Eigenmaaltijden.Pages.AccountSettingsModel
+<ul class="nav nav-pills nav-justified">
+    <li class="nav-item">
+        <a class="nav-link" asp-page="/Index">Gerechten</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-page="/Index">Profiel</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active">Account</a>
+    </li>
+</ul>
+
+<form asp-page="AccountSettings" asp-page-handler="AccountSettings" method="post" class="card">
+    <p>Voor het veranderen van uw account gegevens kunt u hier terecht. als u een waarde niet wilt veranderen laat deze dan leeg.</p>
+
+    <label>Email</label>
+    <input type="email"  asp-for="@Model.Email" placeholder=@Model.db.GetLoggedInUser().Email />
+
+    <label>Huidig Wachtwoord</label>
+    <input type="password" name="CurrentPasswrod" value="" placeholder='********'/>
+
+    <label>Nieuw Wachtwoord</label>
+    <input type="password" name="Password" value="" placeholder='********'/>
+
+    <label>Bevestig Nieuw Wachtwoord</label>
+    <input type="password" name="PasswordConfirm" value="" placeholder='********'/>
+
+    <br />
+    <input type="submit" name="Submit" value="Submit" class=""/>
+
+    <br />
+    <p>@Model.ErrorMessage</p>
+</form>
+

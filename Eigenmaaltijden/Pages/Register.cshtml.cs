@@ -33,7 +33,7 @@ namespace Eigenmaaltijden.Pages
         [BindProperty]
         public bool AcceptedTOS { get; set; }
 
-        Database db = new wwwroot.includes.Database();
+        Database db = Database.get();
 
         public void OnGet()
         {
@@ -87,6 +87,12 @@ namespace Eigenmaaltijden.Pages
             if (Password.Length <= 7)
             {
                 ErrorMessage = "Password should be atleast 8 characters long.";
+                return Page();
+            }
+
+            if (string.IsNullOrWhiteSpace(Password))
+            {
+                ErrorMessage = "Password cannot be only spaces.";
                 return Page();
             }
 

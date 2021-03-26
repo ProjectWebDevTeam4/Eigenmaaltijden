@@ -15,7 +15,7 @@ namespace EigenMaaltijd.Pages
     {
         private readonly ILogger<IndexModel> _logger;
 
-        Database db = new Database();
+        public Database db = Database.get();
         public bool isLoggedIn { get; set; }
 
 
@@ -31,7 +31,15 @@ namespace EigenMaaltijd.Pages
 
         public string getName()
         {
-            return db.user.Name;
+            return db.GetLoggedInUser().Name;
+        }
+
+        public IActionResult OnGetLogout()
+        {
+            db.LogoutUser();
+            HttpContext.Session.Clear();
+
+            return RedirectToPage("Index");
         }
     }
 }

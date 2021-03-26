@@ -13,7 +13,17 @@ namespace Eigenmaaltijden.wwwroot.includes
 {
     public class Database
     {
-        public UserData user;
+        private UserData user;
+        private static Database instance;
+
+        public static Database get()
+        {
+            if (instance == null)
+            {
+                instance = new Database();
+            }
+            return instance;
+        }
 
         /// <summary>
         /// Connects to the database using a MySQL connection string.
@@ -45,5 +55,21 @@ namespace Eigenmaaltijden.wwwroot.includes
             return false;
         }
 
+        /// <summary>
+        /// Function for accessing the Dats of the User that is currently logged in.
+        /// </summary>
+        /// <returns>The user data </returns>
+        public UserData GetLoggedInUser()
+        {
+            return user;
+        }
+
+        /// <summary>
+        /// clear user from variable;
+        /// </summary>
+        public void LogoutUser()
+        {
+            user = null;
+        }
     }
 }
