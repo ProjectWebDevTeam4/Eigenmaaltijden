@@ -1,0 +1,35 @@
+﻿@page
+@model Eigenmaaltijden.Pages.ProfileSettings
+
+@{
+    ViewData["Title"] = "Settings";
+    Model.GetData();
+}
+<div class="container">
+    <div id="tab" class="row">
+        <div class="col-6" id="tab-profile" style="background-color: green"><span>Profiel</span></div>
+        <div class="col-6" id="tab-account" style="background-color: red"><span>Account</span></div>
+    </div>
+    <form method="post" asp-page="ProfileSettings" asp-page-handler="ProfileSettings">
+        <div id="settings" style="background-color: blue" class="row">
+            <div class="col-6" style="background-color: yellow">
+                <label for="username">Gebruikersnaam</label>
+                <input type="text" id="username" name="username" asp-for="@Model.Name" value="@Model.Name"/>
+                <br/>
+                <label for="phonenumber">Telefoonnummer</label>
+                <input type="text" id="phonenumber" name="phonenumber" asp-for="@Model.PhoneNumber" value="@Model.PhoneNumber"/>
+                <br/>
+                <label for="about">Stukje over jezelf</label>
+                <textarea id="about" name="about" asp-for="@Model.Description">@Model.Description</textarea>
+                <br/>
+            </div>
+            <div class="col-6" style="background-color: orange">
+                <input type="checkbox" id="email-check" name="email" value="email">
+                <label for="email-check"> Weergeef mijn emailadres</label><br/>
+                <input type="checkbox" id="phone-check" name="phone" value="phone">
+                <label for="phone-check"> Weergeef mijn telefoonnummer</label><br/>
+                <input type="submit" value="wijzigingen opslaan"/>
+            </div>
+        </div>
+    </form>
+</div>

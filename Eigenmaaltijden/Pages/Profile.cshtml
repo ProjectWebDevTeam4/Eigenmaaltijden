@@ -1,0 +1,61 @@
+﻿@page
+@model Eigenmaaltijden.Pages.Profile
+
+@{
+    ViewData["Title"] = "Profile";
+    Model.GetData();
+}
+
+<div class="row">
+    <div class="col-4" id="profile-container" style="background-color: yellow">
+        <div id="person">
+            <img src="images/Placeholder.svg" style="border-radius: 50%; width: 50%;"/>
+            <p id="username" style="width: 100%; text-align: center">@Model.Name</p>
+        </div>
+        <hr/>
+        <div id="person-data">
+            <ul>
+                <li><p><img src="images/icons/place-24px.svg">@Model.City</p></li>
+                <li><p><img src="images/icons/mail-24px.svg">@Model.Email</p></li>
+                <li><p><img src="images/icons/call-24px.svg">@Model.Phone</p></li>
+            </ul>
+        </div>
+        <hr/>
+        <div id="person-intro">
+            <span>Over mij</span>
+            <p>
+                @Model.Intro
+            </p>
+        </div>
+    </div>
+    <div id="gerechten-container" class="col-8" style="background-color: blue">
+        <div id="gerechten" style="background-color: lime">
+            <span>Mijn gerechten</span>
+            <div id="mijnGerechten-container">
+                @{
+                    foreach (var maaltijd in Model.maaltijd)
+                    {
+                        <div id="gerecht" style="background-color: orange; width: 45%">
+                            <div id="title-gerecht"><p>@maaltijd.Name</p></div>
+                            <img src="@maaltijd.Image" />
+                        </div>   
+                    }
+                }
+            </div>
+        </div>
+        <div id="verwachtte" style="background-color: green">
+            <span>Mijn verwachtte gerechten</span>
+            <div id="verwachtteGerechten-container">
+                @{
+                    foreach (var maaltijd in Model.verwachttemaaltijd)
+                    {
+                        <div id="gerecht" style="background-color: orange; width: 45%">
+                            <div id="title-gerecht"><p>@maaltijd.Name</p></div>
+                            <img src="@maaltijd.Image" />
+                        </div>   
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
