@@ -45,7 +45,7 @@ namespace Eigenmaaltijden.wwwroot.includes
             if (SessionID != null)
             {
                 using var connection = Connect();
-                user = connection.QuerySingle<UserData>("SELECT tb2.`Name`, tb1.`Email` FROM `verkoper` AS `tb1` INNER JOIN `verkoper_profiel` AS `tb2` ON tb1.`UserID` = tb2.`UserID` WHERE tb1.`SessionID`=@SessionID AND tb1.`UserID`=@UserID LIMIT 1", new { SessionID, UserID });
+                user = connection.QuerySingle<UserData>("SELECT tb2.UserID, tb2.`Name`, tb1.`Email`, tb3.`Street`, tb3.`Number`, tb3.`Addon`, tb3.`City`, tb3.`Country`, tb3.`PostCode` FROM `verkoper` AS `tb1` INNER JOIN `verkoper_profiel` AS `tb2` ON tb1.`UserID` = tb2.`UserID` INNER JOIN `verkoper_adres` AS tb3 ON tb1.`UserID` = tb3.`UserID` WHERE tb1.`SessionID`=@SessionID AND tb1.`UserID`=@UserID LIMIT 1", new { SessionID, UserID });
 
                 if (user != null)
                 {

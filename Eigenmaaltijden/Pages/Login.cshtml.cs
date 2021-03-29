@@ -12,8 +12,6 @@ namespace Eigenmaaltijden.Pages
 {
     public class LoginModel : PageModel
     {
-        
-
         [BindProperty]
         public string Email { get; set; }
 

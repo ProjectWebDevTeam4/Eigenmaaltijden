@@ -28,10 +28,30 @@ namespace Eigenmaaltijden.Pages
         [BindProperty]
         public string ConfirmPassword { get; set; }
 
-        public string ErrorMessage = "";
+        [BindProperty]
+        public string Street { get; set; }
+
+        [BindProperty]
+        public int HouseNumber { get; set; }
+
+        [BindProperty]
+        public string Addon { get; set; }
+
+        [BindProperty]
+        public string City { get; set; }
+
+        [BindProperty]
+        public string Country { get; set; }
+
+        [BindProperty]
+        public string PostCode { get; set; }
 
         [BindProperty]
         public bool AcceptedTOS { get; set; }
+
+
+        public string ErrorMessage = "";
+
 
         Database db = Database.get();
 
@@ -103,6 +123,7 @@ namespace Eigenmaaltijden.Pages
                 int UserID = connection.QuerySingle<int>("SELECT UserID FROM verkoper WHERE Email=@Email AND Password=@Password", new { Email, Password});
                 string ProfilePhotoPath = "img/users/default.png"; // Sets profile picture to default (placeholder) picture.
                 connection.Execute("INSERT INTO verkoper_profiel (UserID, Name, ProfilePhotoPath) VALUES (@UserID, @Name, @ProfilePhotoPath)", new { UserID, Name, ProfilePhotoPath });
+                connection.Execute("INSERT INTO verkoper_adres (UserID, Street, Number, Addon, City, Country, PostCode) VALUES (@UserID, @Street, @HouseNumber, @Addon, @City, @Country, @PostCode)", new { UserID, Street, HouseNumber, Addon, City, Country, PostCode});
                 return OnPostLogin();
             }
             else

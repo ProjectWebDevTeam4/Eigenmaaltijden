@@ -15,17 +15,37 @@ namespace Eigenmaaltijden.Pages
         public Database db = Database.get();
 
         [BindProperty]
-        public string Email { get; set; }
-        [BindProperty]
         public string Name { get; set; }
+
+        [BindProperty]
+        public string Email { get; set; }
 
         [BindProperty]
         public string CurrentPassword { get; set; }
 
         [BindProperty]
         public string NewPassword { get; set; }
+
         [BindProperty]
-        public string ConfirmPassword { get; set; }
+        public string ConfirmNewPassword { get; set; }
+
+        [BindProperty]
+        public string Street { get; set; }
+
+        [BindProperty]
+        public int HouseNumber { get; set; }
+
+        [BindProperty]
+        public string Addon { get; set; }
+
+        [BindProperty]
+        public string City { get; set; }
+
+        [BindProperty]
+        public string Country { get; set; }
+
+        [BindProperty]
+        public string PostCode { get; set; }
 
         public string ErrorMessage = "";
 
@@ -53,58 +73,46 @@ namespace Eigenmaaltijden.Pages
                 }
             }
 
-            if (NewPassword != ConfirmPassword && !string.IsNullOrWhiteSpace(NewPassword)) // Is Password equal fo comfirm?
-            {
-                ErrorMessage = "Passwords don't match.";
-                return Page();
-            }
+            uint UserID = db.GetLoggedInUser().UserID;
+            connection.Execute("UPDATE `verkoper_adres` SET `Street`=@Street, `Number`=@HouseNumber, `Addon`=@Addon, `City`=@City, `Country`=@Country, `PostCode`=@PostCode WHERE UserID=@UserID", new { Street, HouseNumber, Addon, City, Country, PostCode, UserID});
 
-            if (NewPassword.Length <= 7 && !string.IsNullOrWhiteSpace(NewPassword)) // Is Password Valid?
+            if (!string.IsNullOrWhiteSpace(NewPassword) && !string.IsNullOrWhiteSpace(ConfirmNewPassword))
             {
-                ErrorMessage = "Password should be atleast 8 characters long.";
-                return Page();
-            }
-
-            if (NewPassword == CurrentPassword)
-            {
-                ErrorMessage = "Password cannot be the same as old password.";
-                return Page();
-            }
-
-            if (NewPassword != "") { 
-                if (connection.QuerySingle<int>("SELECT COUNT(*) FROM verkoper WHERE `Email`=@Email AND `Password`=@CurrentPassword", new { Email, CurrentPassword }) == 0)
+                if (NewPassword != ConfirmNewPassword || string.IsNullOrWhiteSpace(NewPassword)) // Is Password equal fo comfirm?
                 {
-                    connection.Execute("UPDATE `verkoper` SET `Password`=@NewPassword WHERE `Email`=@Email AND `Password`=@CurrentPassword", new { NewPassword, Email, CurrentPassword });
-                }
-                else
-                {
-                    //Password isn't correct
-
+                    ErrorMessage = "Passwords don't match.";
+                    return Page();
                 }
 
+                if (string.IsNullOrWhiteSpace(NewPassword) || NewPassword.Length <= 7) // Is Password Valid?
+                {
+                    ErrorMessage = "Password should be atleast 8 characters long.";
+                    return Page();
+                }
+
+                if (NewPassword == CurrentPassword)
+                {
+                    ErrorMessage = "Password cannot be the same as old password.";
+                    return Page();
+                }
+
+                if (NewPassword != "")
+                {
+                    if (connection.QuerySingle<int>("SELECT COUNT(*) FROM verkoper WHERE `Email`=@Email AND `Password`=@CurrentPassword", new { Email, CurrentPassword }) == 0)
+                    {
+                        connection.Execute("UPDATE `verkoper` SET `Password`=@NewPassword WHERE `Email`=@Email AND `Password`=@CurrentPassword", new { NewPassword, Email, CurrentPassword });
+                    }
+                    else
+                    {
+                        //Password isn't correct
+
+                    }
+
+                }
             }
+            db.loginCheck(HttpContext.Session.GetString("sessionid"), HttpContext.Session.GetString("uid"));
 
-
-
-            //if password is not null ? update password if current password is correct!
-
-            /*
-            if (connection.QuerySingle<int>("SELECT COUNT(*) FROM verkoper WHERE `Email`=@Email", new { Email }) == 0)
-            {
-                connection.Execute("INSERT INTO verkoper (Email, Password) VALUES (@Email, @Password)", new { Email, Password });
-                // need id for user profile
-                int UserID = connection.QuerySingle<int>("SELECT UserID FROM verkoper WHERE Email=@Email AND Password=@Password", new { Email, Password });
-                string ProfilePhotoPath = "img/users/default.png"; // Sets profile picture to default (placeholder) picture.
-                connection.Execute("INSERT INTO verkoper_profiel (UserID, Name, ProfilePhotoPath) VALUES (@UserID, @Name, @ProfilePhotoPath)", new { UserID, Name, ProfilePhotoPath });
-                return OnPostLogin();
-            }
-            else
-            {
-                ErrorMessage = "Email or Password does not exist.";
-                return Page();
-            }*/
-
-            return Page();
+            return RedirectToPage("AccountSettings");
         }
     }
 }
