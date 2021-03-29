@@ -46,6 +46,7 @@
         text-align: center;
         font-weight: 600;
         border-bottom: 1px #707070 solid;
+        margin: 0 !important;
     }
 
 
@@ -81,12 +82,13 @@
                     {
                         <div class="profileBox gerecht" id="gerecht">
                             <p class="titleGerecht" id="title-gerecht" >@maaltijd.Name</p>
-                            <img src="@maaltijd.Image" style="width:100%"/>
+                            <img src="@maaltijd.Image" style="width:100%; height: 125px"/>
                         </div>   
                     }
                 }
             </div>
         </div>
+        <br/>
         <div id="verwachtte">
             <span class="title">Mijn verwachtte gerechten</span>
             <div id="verwachtteGerechten-container">
@@ -95,7 +97,7 @@
                     {
                         <div class="profileBox gerecht" id="gerecht">
                             <p class="titleGerecht" id="title-gerecht">@maaltijd.Name</p>
-                            <img src="@maaltijd.Image" />
+                            <img src="@maaltijd.Image" style="width:100%; height: 125px"/>
                         </div>   
                     }
                 }
