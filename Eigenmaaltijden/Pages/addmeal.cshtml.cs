@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using Eigenmaaltijden.wwwroot.includes;
 using Microsoft.AspNetCore.Http;
-
+using Eigenmaaltijden.wwwroot.includes;
 
 namespace EigenMaaltijd.Pages
 {
@@ -16,8 +15,8 @@ namespace EigenMaaltijd.Pages
         private readonly ILogger<AddMeal> _logger;
 
         Database db = new Database();
+        Manager _manager = new Manager();
         public bool isLoggedIn { get; set; }
-
 
         public AddMeal(ILogger<AddMeal> logger)
         {
@@ -33,6 +32,14 @@ namespace EigenMaaltijd.Pages
             isLoggedIn = db.loginCheck(HttpContext.Session.GetString("sessionid"), HttpContext.Session.GetString("uid"));
             if (!isLoggedIn)
                 return RedirectToPage("/Login");
+            return null;
+        }
+
+        public IActionResult OnPost() {
+            Console.WriteLine(Request.Form["name"]);
+            if (!this._manager.ValidateMealName(Request.Form["name"]))
+                return null;
+            this._manager.SaveToDatabase(this._manager.Parse(Request.Form), int.Parse(HttpContext.Session.GetString("uid")));
             return null;
         }
     }
