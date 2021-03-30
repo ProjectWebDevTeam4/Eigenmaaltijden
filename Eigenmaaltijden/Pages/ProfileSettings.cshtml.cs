@@ -27,8 +27,8 @@ namespace Eigenmaaltijden.Pages
         
         public IFormFile uploadedImage { get; set; }
         private readonly IWebHostEnvironment _environment;
-        
-        Database db = new wwwroot.includes.Database();
+        public bool isLoggedIn { get; set; }
+        public Database db = Database.get();
 
         public ProfileSettings(IWebHostEnvironment env) {
             _environment = env;
@@ -37,7 +37,12 @@ namespace Eigenmaaltijden.Pages
         public void GetData()
         {
             using var connection = db.Connect();
-            var profile = connection.QuerySingle("SELECT * FROM verkoper_profiel WHERE UserID = 1");
+            
+            uint UserID = db.GetLoggedInUser().UserID;
+            var profile = connection.QuerySingle("SELECT * FROM verkoper_profiel WHERE UserID = @ID", new
+            {
+                ID = UserID
+            });
 
             Name = profile.Name;
             PhoneNumber = profile.PhoneNumber;
@@ -51,9 +56,11 @@ namespace Eigenmaaltijden.Pages
             Description = Request.Form["about"];
 
             var connection = db.Connect();
-
-            connection.Execute("UPDATE verkoper_profiel SET Name = @NAME, Description = @DESCRIPTION WHERE UserID = 1", new
+            
+            uint UserID = db.GetLoggedInUser().UserID;
+            connection.Execute("UPDATE verkoper_profiel SET Name = @NAME, Description = @DESCRIPTION WHERE UserID = @ID", new
             {
+                ID = UserID,
                 NAME = Name,
                 PHONE = PhoneNumber,
                 DESCRIPTION = Description
@@ -63,6 +70,17 @@ namespace Eigenmaaltijden.Pages
             var exportPath = Path.Combine(_environment.WebRootPath, "uploads", uploadedImage.FileName);
             using(Stream fileStream = new FileStream(exportPath, FileMode.Create))
                 await uploadedImage.CopyToAsync(fileStream);
+        }
+
+        public IActionResult OnGet()
+        {
+            isLoggedIn = db.loginCheck(HttpContext.Session.GetString("sessionid"), HttpContext.Session.GetString("uid"));
+            if (!isLoggedIn)
+            {
+                return RedirectToPage("/Login");
+            }
+            GetData();
+            return null;
         }
     }
 }
