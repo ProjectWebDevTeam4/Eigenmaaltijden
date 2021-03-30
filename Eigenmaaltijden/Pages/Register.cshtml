@@ -20,8 +20,10 @@
                         <label for="email_address" style="margin-top: 2%;"><b>E-mail</b></label>
                         <input type="text" class="form-control" placeholder="John@doe.nl" asp-for="@Model.Email" required autofocus>
 
+
                         <label for="password" style="margin-top: 5%;"><b>Password</b></label>
                         <input type="password" class="form-control" placeholder="********" asp-for="@Model.Password" required>
+
 
                         <label for="password" style="margin-top: 5%;"><b>Bevestig Wachtwoord</b></label>
                         <input type="password" class="form-control" placeholder="********" asp-for="@Model.ConfirmPassword" required>
@@ -53,6 +55,7 @@
                         <input type="checkbox" asp-for="@Model.AcceptedTOS" />
                         <br />
                         <input type="submit" value="Login" class="btn bg-danger text-light" />
+
                         <p class="text-danger"><b>@Model.ErrorMessage</b></p>
 
 
