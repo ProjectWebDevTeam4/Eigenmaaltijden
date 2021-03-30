@@ -39,12 +39,13 @@ namespace Eigenmaaltijden.Pages
         public List<Maaltijd> verwachttemaaltijd = new List<Maaltijd>();
 
 
-        Database db = new wwwroot.includes.Database();
+        Database db = Database.get();
 
         public void GetData()
         {
             using var connection = db.Connect();
-            var profile = connection.QuerySingle("SELECT verkoper.Email, verkoper_adres.City, verkoper_profiel.* FROM `verkoper_profiel` INNER JOIN verkoper ON verkoper.UserID = verkoper_profiel.UserID INNER JOIN verkoper_adres ON verkoper_adres.UserID = verkoper_profiel.UserID WHERE verkoper.UserID = 1");
+            uint UserID = db.GetLoggedInUser().UserID;
+            var profile = connection.QuerySingle("SELECT verkoper.Email, verkoper_adres.City, verkoper_profiel.* FROM `verkoper_profiel` INNER JOIN verkoper ON verkoper.UserID = verkoper_profiel.UserID INNER JOIN verkoper_adres ON verkoper_adres.UserID = verkoper_profiel.UserID WHERE verkoper.UserID =@UserID", new { UserID });
 
             Pfp = profile.ProfilePhotoPath;
             Name = profile.Name;
@@ -53,7 +54,7 @@ namespace Eigenmaaltijden.Pages
             Phone = profile.PhoneNumber;
             Intro = profile.Description;
 
-            var maaltijden = connection.Query("SELECT maaltijden.* FROM `maaltijden` INNER JOIN maaltijd_info ON maaltijd_info.MealID = maaltijden.MealID WHERE maaltijden.UserID = 1 AND maaltijd_info.PreparedOn <= CAST(NOW() AS date)");
+            var maaltijden = connection.Query("SELECT maaltijden.* FROM `maaltijden` INNER JOIN maaltijd_info ON maaltijd_info.MealID = maaltijden.MealID WHERE maaltijden.UserID = @UserID AND maaltijd_info.PreparedOn <= CAST(NOW() AS date)", new { UserID } );
             
             if (maaltijden.AsList().Count > 0)
             {
@@ -69,7 +70,7 @@ namespace Eigenmaaltijden.Pages
                 }
             }
             
-            var verwachttemaaltijden = connection.Query("SELECT maaltijden.* FROM `maaltijden` INNER JOIN maaltijd_info ON maaltijd_info.MealID = maaltijden.MealID WHERE maaltijden.UserID = 1 AND maaltijd_info.PreparedOn > CAST(NOW() AS date)");
+            var verwachttemaaltijden = connection.Query("SELECT maaltijden.* FROM `maaltijden` INNER JOIN maaltijd_info ON maaltijd_info.MealID = maaltijden.MealID WHERE maaltijden.UserID =@UserID AND maaltijd_info.PreparedOn > CAST(NOW() AS date)", new { UserID } );
 
             
             if (maaltijden.AsList().Count > 0)
