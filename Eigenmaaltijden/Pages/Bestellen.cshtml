@@ -1,0 +1,27 @@
+﻿@page
+@model Eigenmaaltijden.Pages.BestellenModel
+@{
+    ViewData["Title"] = "Order a meal";
+}
+
+<div class="text-center">
+    <h1 class="text-danger">Bestel je maaltijd</h1>
+    <form class="w-75 mx-auto mt-5" method="post" enctype="multipart/form-data">
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="">Voor en achternaam</span>
+            </div>
+            <input type="text" class="form-control" placeholder="voornaam" name="firstname">
+            <input type="text" class="form-control" placeholder="achternaam" name="lastname">
+        </div>
+        <div class="form-group">
+            <label for="e-mailadres">E-mailadres</label>
+            <input type="email" class="form-control" placeholder="e-mailadres" name="adress">
+        </div>
+        <div class="form-group">
+            <label for="phone">Telefoon nummer</label>
+            <input type="tel" class="form-control" placeholder="telefoonnummmer" name="phone">
+        </div>
+        <button class="btn btn-danger" type="submit">Bestellen</button>
+    </form>
+</div>
