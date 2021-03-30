@@ -3,7 +3,7 @@
 
 @{
     ViewData["Title"] = "Settings";
-    Model.GetData();
+    
 }
 <style>
     html{
@@ -53,7 +53,7 @@
 <div class="container page">
     <div id="tab" class="row">
         <div class="col-6" id="tab-profile">Profiel</div>
-        <div class="col-6" id="tab-account"><span>Account</span></div>
+        <div class="col-6" id="tab-account"><a href="/AccountSettings">Account</a></div>
     </div>
     <form method="post" asp-page="ProfileSettings" asp-page-handler="ProfileSettings">
         <div id="settings" class="row">

@@ -48,11 +48,7 @@ namespace Eigenmaaltijden.Pages
         public string PostCode { get; set; }
 
         public string ErrorMessage = "";
-
-        public void OnGet()
-        {
-
-        }
+        public bool isLoggedIn { get; set; }
 
         public IActionResult OnPostAccountSettings()
         {
@@ -113,6 +109,18 @@ namespace Eigenmaaltijden.Pages
             db.loginCheck(HttpContext.Session.GetString("sessionid"), HttpContext.Session.GetString("uid"));
 
             return RedirectToPage("AccountSettings");
+        }
+
+        public IActionResult OnGet()
+        {
+            isLoggedIn = db.loginCheck(HttpContext.Session.GetString("sessionid"),
+                HttpContext.Session.GetString("uid"));
+            if (!isLoggedIn)
+            {
+                return RedirectToPage("/Login");
+            }
+
+            return null;
         }
     }
 }
