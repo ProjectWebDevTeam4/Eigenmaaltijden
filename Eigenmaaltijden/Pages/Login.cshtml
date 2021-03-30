@@ -8,7 +8,7 @@
 <div class="row justify-content-center">
     <div class="col-lg-6">
         <div class="card bg-primary border">
-            <div class="card-header bg-primary text-light"><b>Inloggen bij Eigenmaaltijd</b></div>
+            <div class="card-header bg-danger text-light"><b>Inloggen bij Eigenmaaltijd</b></div>
             <div class="card-body bg-light">
 
                 <!-- Login Form -->
@@ -21,7 +21,7 @@
                         <input type="password" class="form-control" placeholder="********" asp-for="@Model.Password" required>
 
                         <br />
-                        <input type="submit" value="Login" class="btn bg-primary text-light" />
+                        <input type="submit" value="Login" class="btn bg-danger text-light" />
                         <p class="text-danger"><b>@Model.ErrorMessage</b></p>
                     </div>
                 </form>
