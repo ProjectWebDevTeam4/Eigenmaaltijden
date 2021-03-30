@@ -1,64 +1,104 @@
 ﻿@page
 @model Eigenmaaltijden.Pages.AccountSettingsModel
-<ul class="nav nav-pills nav-justified">
-    <li class="nav-item">
-        <a class="nav-link" asp-page="/ProfileSettings">Profiel</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link active">Account</a>
-    </li>
-</ul>
+    <style>
+        html {
+            font-family: "Century Gothic";
+        }
 
-<form asp-page="AccountSettings" asp-page-handler="AccountSettings" method="post" class="card">
-    <p>Voor het veranderen van uw account gegevens kunt u hier terecht. als u een waarde niet wilt veranderen laat deze dan leeg.</p>
+        .page {
+            border: 1px solid #707070;
+            border-radius: 15px;
+            width: 70%;
+        }
 
-    <!-- Register Form -->
-    <form asp-page="AccountSettings" asp-page-handler="AccountSettings" method="post" class="card">
-        <div class="container-fluid col-11 text-secondary">
-            <label style="margin-top: 2%;"><b>Name</b></label>
-            <input type="text" class="form-control" value="@Model.db.GetLoggedInUser().Name" asp-for="@Model.Name" required autofocus>
+        #tab {
+            text-align: center;
+            font-weight: bold;
+            border-bottom: 1px solid #707070;
+        }
 
-            <label style="margin-top: 2%;"><b>E-mail</b></label>
-            <input type="text" class="form-control" value="@Model.db.GetLoggedInUser().Email" asp-for="@Model.Email" required autofocus>
+        #tab-account {
+            background-color: #C1272D;
+            border-top-right-radius: 15px;
+            
+            color: white;
+            padding: 7px;
+        }
 
-            <label style="margin-top: 2%;"><b>Huidig Wachtwoord</b></label>
-            <input type="password" class="form-control" name="CurrentPasswrod" value="" placeholder='********' asp-for="@Model.CurrentPassword" />
+        #tab-profile {
+            background-color: white;
+            border-top-left-radius: 15px;
+            color: #C1272D;
+            padding: 7px;
+        }
 
-            <label style="margin-top: 2%;"><b>Nieuw Wachtwoord</b></label>
-            <input type="password" class="form-control" name="Password" value="" placeholder='********' asp-for="@Model.NewPassword" />
+        #settings {
+            padding: 10px;
+            padding-top: 27px;
+        }
 
-            <label style="margin-top: 2%;"><b>Bevestig Nieuw Wachtwoord</b></label>
-            <input type="password" class="form-control" name="PasswordConfirm" value="" placeholder='********' asp-for="@Model.ConfirmNewPassword" />
+        .labels {
+            color: #C1272D;
+            font-size: 17px;
+        }
 
-            <label style="margin-top: 5%;"><b>Straatnaam</b></label>
-            <input type="text" class="form-control" value="@Model.db.GetLoggedInUser().Street" placeholder="Molenweg" asp-for="@Model.Street">
-
-            <label style="margin-top: 5%;"><b>Huisnummer</b></label>
-            <input type="number" class="form-control" placeholder="33" value="@Model.db.GetLoggedInUser().Number" asp-for="@Model.HouseNumber">
-
-            <label style="margin-top: 5%;"><b>Toevoeging</b></label>
-            <input type="text" class="form-control" placeholder="A" value="@Model.db.GetLoggedInUser().Addon" asp-for="@Model.Addon">
-
-            <label style="margin-top: 5%;"><b>Stad</b></label>
-            <input type="text" class="form-control" placeholder="Leeuwarden" value="@Model.db.GetLoggedInUser().City" asp-for="@Model.City">
-
-
-            <label style="margin-top: 5%;"><b>Land</b></label><br />
-            <input type="text" class="form-control" placeholder="Nederland" value="@Model.db.GetLoggedInUser().Country" asp-for="@Model.Country" required>
-            <br />
-
-            <label for="Postcode" style="margin-top: 5%;"><b>Postcode</b></label>
-            <input type="text" class="form-control" placeholder="1234AB" value="@Model.db.GetLoggedInUser().PostCode" asp-for="@Model.PostCode" required>
-
-            <br />
-            <input type="submit" value="Change" class="btn bg-danger text-light" />
-            <p class="text-danger"><b>@Model.ErrorMessage</b></p>
-
-
+        input[type=checkbox] {
+            transform: scale(1.5);
+        }
+    </style>
+    <div class="container page">
+        <div id="tab" class="row">
+            <div class="col-6" id="tab-profile"><a href="/ProfileSettings">Profiel</a></div>
+            <div class="col-6" id="tab-account">Account</div>
         </div>
-    </form>
+        <form asp-page="AccountSettings" asp-page-handler="AccountSettings" method="post">
+            <div id="settings" class="row">
+                <div class="col-6">
+                    <label style="margin-top: 2%;"><b>Name</b></label>
+                    <input type="text" class="form-control" value="@Model.db.GetLoggedInUser().Name" asp-for="@Model.Name" required autofocus>
 
-    <br />
-    <p>@Model.ErrorMessage</p>
+                    <label style="margin-top: 2%;"><b>E-mail</b></label>
+                    <input type="text" class="form-control" value="@Model.db.GetLoggedInUser().Email" asp-for="@Model.Email" required autofocus>
+
+                    <label style="margin-top: 2%;"><b>Huidig Wachtwoord</b></label>
+                    <input type="password" class="form-control" name="CurrentPasswrod" value="" placeholder='********' asp-for="@Model.CurrentPassword" />
+
+                    <label style="margin-top: 2%;"><b>Nieuw Wachtwoord</b></label>
+                    <input type="password" class="form-control" name="Password" value="" placeholder='********' asp-for="@Model.NewPassword" />
+
+                    <label style="margin-top: 2%;"><b>Bevestig Nieuw Wachtwoord</b></label>
+                    <input type="password" class="form-control" name="PasswordConfirm" value="" placeholder='********' asp-for="@Model.ConfirmNewPassword" />
+
+                    <input type="submit" class="btn" style="bottom: 25px; position: absolute; color: white; background-color: #C1272D" value="Wijzigingen Opslaan" />
+                    <p class="text-danger"><b>@Model.ErrorMessage</b></p>
+                </div>
+                <div class="col-6">
+                    <label style="margin-top: 2%;"><b>Straatnaam</b></label>
+                    <input type="text" class="form-control" value="@Model.db.GetLoggedInUser().Street" placeholder="Molenweg" asp-for="@Model.Street">
+
+                    <label style="margin-top: 2%;"><b>Huisnummer</b></label>
+                    <input type="number" class="form-control" placeholder="33" value="@Model.db.GetLoggedInUser().Number" asp-for="@Model.HouseNumber">
+
+                    <label style="margin-top: 2%;"><b>Toevoeging</b></label>
+                    <input type="text" class="form-control" placeholder="A" value="@Model.db.GetLoggedInUser().Addon" asp-for="@Model.Addon">
+
+                    <label style="margin-top: 2%;"><b>Stad</b></label>
+                    <input type="text" class="form-control" placeholder="Leeuwarden" value="@Model.db.GetLoggedInUser().City" asp-for="@Model.City">
+
+
+                    <label style="margin-top: 2%;"><b>Land</b></label>
+                    <input type="text" class="form-control" placeholder="Nederland" value="@Model.db.GetLoggedInUser().Country" asp-for="@Model.Country" required>
+
+                    <label for="Postcode" style="margin-top: 5%;"><b>Postcode</b></label>
+                    <input type="text" class="form-control" placeholder="1234AB" value="@Model.db.GetLoggedInUser().PostCode" asp-for="@Model.PostCode" required>
+
+                    <br />
+                </div>
+                
+
+
+            </div>
 </form>
+
+        
 
