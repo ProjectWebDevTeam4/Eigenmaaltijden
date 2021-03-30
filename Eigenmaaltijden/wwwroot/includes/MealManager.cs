@@ -92,7 +92,7 @@ namespace Eigenmaaltijden.wwwroot.includes {
         }
 
         private IDbConnection Connect() {
-            return new MySqlConnection(@"Server=localhost;Port=3306;Database=eigenmaaltijden;Uid=root;Pwd=NEWPASSWORD;");
+            return new MySqlConnection(@"Server=localhost;Port=3306;Database=eigenmaaltijden;Uid=root;Pwd=;");
         }
 
         public bool ValidateMealName(string name) {
