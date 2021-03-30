@@ -1,0 +1,105 @@
+﻿@page
+@model Eigenmaaltijden.Pages.Profile
+
+@{
+    ViewData["Title"] = "Profile";
+    Model.GetData();
+}
+<style>
+    html{
+        font-family: 'Century Gothic';
+    }
+    ul {
+        list-style-type: none;
+        padding:0px;
+    }
+
+    .profileBox {
+        background-color: white;
+        border: #707070 1px solid;
+        border-radius: 15px;
+        margin: 2.5%;
+        margin-top: 0%;
+    }
+    #pfp {
+        border-radius: 50%;
+        width: 50%;
+        margin: 5%;
+        margin-left: 25%;
+        border: 1px #707070 solid;
+    }
+
+    .gerecht {
+        width: 45%;
+        height: 150px;
+        float: left;
+        margin-left: 0%;
+        margin-right: 5%;
+    }
+    .title {
+        font-size: 30px;
+        font-weight: 600;
+        color: #C1272D;
+        width: 100%;
+    }
+    .titleGerecht {
+        text-align: center;
+        font-weight: 600;
+        border-bottom: 1px #707070 solid;
+        margin: 0 !important;
+    }
+
+    .maaltijd-img {
+        width:100%; 
+        height: 125px
+    }
+</style>
+<div class="row">
+    <div class="profileBox col-3" id="profile-container">
+        <div id="person" style="width:100%">
+            <img id="pfp" src="images/Placeholder.svg"/>
+            <p class="title" id="username" style="text-align:center">@Model.Name</p>
+        </div>
+        <hr/>
+        <div id="person-data">
+            <ul>
+                <li><p><img src="images/icons/place-24px.svg">  @Model.City</p></li>
+                <li><p><img src="images/icons/mail-24px.svg">  @Model.Email</p></li>
+                <li><p><img src="images/icons/call-24px.svg">  @Model.Phone</p></li>
+            </ul>
+        </div>
+        <hr/>
+        <div id="person-intro">
+            <p class="title" style="font-size: 20px; text-align:center">Over mij</p>
+            <p>
+                @Model.Intro
+            </p>
+        </div>
+    </div>
+    <div id="gerechten-container" class="col-8">
+        <div id="mijnGerechten-container" style="width: 100%">
+            <p class="title">Mijn gerechten</p>
+            @{
+                foreach (var maaltijd in Model.maaltijd)
+                {
+                    <div class="profileBox gerecht" id="gerecht">
+                        <p class="titleGerecht" id="title-gerecht" >@maaltijd.Name</p>
+                        <img src="@maaltijd.Image" class="maaltijd-img"/>
+                    </div>   
+                }
+            }
+        </div>
+        <div id="verwachtteGerechten-container" style="width: 100%">
+            <p class="title">Mijn verwachtte gerechten</p>
+            @{
+                foreach (var maaltijd in Model.verwachttemaaltijd)
+                {
+                    <div class="profileBox gerecht" id="gerecht">
+                        <p class="titleGerecht" id="title-gerecht">@maaltijd.Name</p>
+                        <img src="@maaltijd.Image" class="maaltijd-img"/>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
