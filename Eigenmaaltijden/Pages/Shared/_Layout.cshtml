@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Eigenmaaltijden.wwwroot.includes;
+@using Microsoft.AspNetCore.Http;
+@{
+    Database db = Database.get();
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -27,13 +32,32 @@
                         </li>
                     </ul>
                     <ul class="navbar-nav ml-auto">
-                        @* Het symbool voor het toevoegen van een maaltijd. *@
-                        @* <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Add"><img src="~/images/add_item.png" alt="img" width="24px" height="24px"></a>
-                        </li> *@
+                        
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Login">Login</a>
-                        </li>
+            <a class="nav-link text-dark" asp-area="" asp-page="/Add"><img src="~/images/add_item.png" alt="img" width="24px" height="24px"></a>
+        </li> 
+                        @if (db.GetLoggedInUser() != null)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">@db.GetLoggedInUser().Name</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" asp-page="/Profiel">Profiel</a>
+                                    <a class="dropdown-item" asp-page="/AccountSettings">Settings</a>
+                                    <a class="dropdown-item" asp-page="/Index" asp-page-handler="logout">Uitloggen</a>
+                                </div>
+                            </li>
+
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Register">Registeren</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Login">Login</a>
+                            </li>
+                        }
+
                     </ul>
                 </div>
             </div>
