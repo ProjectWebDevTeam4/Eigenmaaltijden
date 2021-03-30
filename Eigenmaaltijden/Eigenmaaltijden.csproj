@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Compile Include="wwwroot\classes\UserData.cs" />
+    <Compile Include="wwwroot\classes\MealData.cs" />
     <Compile Include="wwwroot\includes\Database.cs" />
     <Compile Include="wwwroot\includes\MealManager.cs" />
   </ItemGroup>
