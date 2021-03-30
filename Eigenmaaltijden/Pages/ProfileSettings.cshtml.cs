@@ -28,7 +28,7 @@ namespace Eigenmaaltijden.Pages
         public IFormFile uploadedImage { get; set; }
         private readonly IWebHostEnvironment _environment;
         
-        Database db = new wwwroot.includes.Database();
+        Database db = Database.get();
 
         public ProfileSettings(IWebHostEnvironment env) {
             _environment = env;
@@ -37,7 +37,8 @@ namespace Eigenmaaltijden.Pages
         public void GetData()
         {
             using var connection = db.Connect();
-            var profile = connection.QuerySingle("SELECT * FROM verkoper_profiel WHERE UserID = 1");
+            uint UserID = db.GetLoggedInUser().UserID;
+            var profile = connection.QuerySingle("SELECT * FROM verkoper_profiel WHERE UserID = @UserID", new { UserID });
 
             Name = profile.Name;
             PhoneNumber = profile.PhoneNumber;
@@ -51,12 +52,13 @@ namespace Eigenmaaltijden.Pages
             Description = Request.Form["about"];
 
             var connection = db.Connect();
-
-            connection.Execute("UPDATE verkoper_profiel SET Name = @NAME, Description = @DESCRIPTION WHERE UserID = 1", new
+            uint UserID = db.GetLoggedInUser().UserID;
+            connection.Execute("UPDATE verkoper_profiel SET Name = @NAME, Description = @DESCRIPTION WHERE UserID = @USERID", new
             {
                 NAME = Name,
                 PHONE = PhoneNumber,
-                DESCRIPTION = Description
+                DESCRIPTION = Description,
+                USERID = UserID
             });
         }
         public async Task OnPostAsync() {
