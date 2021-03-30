@@ -33,12 +33,11 @@
                     </ul>
                     <ul class="navbar-nav ml-auto">
 
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Add"><img src="~/images/add_item.png" alt="img" width="24px" height="24px"></a>
-                        </li>
-
                         @if (db.GetLoggedInUser() != null)
                         {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/addmeal"><img src="~/images/add_item.png" alt="img" width="24px" height="24px"></a>
+                            </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">@db.GetLoggedInUser().Name</a>
                                 <div class="dropdown-menu">
