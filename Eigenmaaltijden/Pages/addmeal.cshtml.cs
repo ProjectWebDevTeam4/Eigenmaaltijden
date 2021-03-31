@@ -43,6 +43,7 @@ namespace EigenMaaltijd.Pages
                     return;
             }
             this.save = this._manager.GetMeal(mealid);
+            Console.WriteLine(this.save.Description);
             return;
         }
 
