@@ -21,7 +21,7 @@ namespace Eigenmaaltijden.wwwroot.classes {
     }
 
     public struct Preview {
-        public string Url { get; set;  }
+        public string Url { get; set; }
         public string Name { get; set; }
         public string PhotoPath { get; set; }
 
@@ -35,14 +35,14 @@ namespace Eigenmaaltijden.wwwroot.classes {
         public string Description { get; set; }
         public string ImagePath { get; set; }
         public string Frozen { get; set; }
-        public string Category { get; set; }
+        public int Category { get; set; }
         public string Date { get; set; }
         public int Amount { get; set; }
         public int Weight { get; set; }
         public float Price { get; set; }
-        public string Availability { get; set; }
+        public int Availability { get; set; }
 
-        public SavedMeal(string name, string desc, string imagePath, string frozen, string category, string date, int amount, int weight, float price, string availability) {
+        public SavedMeal(string name, string desc, string imagePath, string frozen, int category, string date, int amount, int weight, float price, int availability) {
             this.Name = name; this.Description = desc; this.ImagePath = imagePath; this.Frozen = frozen; this.Category = category; this.Date = date; this.Amount = amount; this.Weight = weight; this.Price = price; this.Availability = availability;
         }
 
@@ -65,7 +65,5 @@ namespace Eigenmaaltijden.wwwroot.classes {
         public int Fresh { get; set; }
         public DateTime PreparedOn { get; set; }
         public int Availability { get; set; }
-
-        public MealInfo() { }
     }
 }

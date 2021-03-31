@@ -62,17 +62,17 @@
             <small name="ingredients-desc" class="form-text text-muted">Voeg de ingrediënten één voor één toe.</small>
         </div>
         <div class="form-check">
-            <input class="form-check-input" name="frozen" type="checkbox" checked=@Model.save.Frozen>
-            <label class="form-check-label" for="frozen">Is het ingevroren?</label>
-            <small name="frozen-desc" class="form-text text-muted">Tik op de box als de maaltijd is ingevroren.</small>
+            <input class="form-check-input" name="fresh" type="checkbox" checked=@Model.save.Frozen>
+            <label class="form-check-label" for="fresh">Is het ingevroren?</label>
+            <small name="fresh-desc" class="form-text text-muted">Tik op de box als de maaltijd is ingevroren.</small>
         </div>
         <div class="form-group mt-3">
-            <label for="options">Categorie maaltijd:</label>
-            <input name="options" type="text" class="form-control" list="options" value=@Model.save.Category>
+            <label for="category">Categorie maaltijd:</label>
+            <input name="category" type="text" class="form-control" list="options" value=@Model.save.Category>
             <datalist id="options">
-                <option value="Veganisme Maaltijd"></option>
-                <option value="Vegetarische Maaltijd"></option>
-                <option value="Vlees Maaltijd"></option>
+                <option value=0>Veganistische Maaltijd</option>
+                <option value=1>Vegetarische Maaltijd</option>
+                <option value=2>Vlees Maaltijd</option>
             </datalist>
             <small name="desc-limit" class="form-text text-muted">Artikel over het <a href="https://ecowijs.nl/uitleg/verschil-tussen-vegetarisch-en-veganistisch-eten/">verschil</a> tussen veganisme en vegetarisch</small>
         </div>
@@ -100,9 +100,9 @@
         <div class="form-group mt-3">
             <input name="saveoptions" type="text" class="form-control" list="save" value=@Model.save.Availability>
             <datalist id="save">
-                <option value="Bewaren"></option>
-                <option value="Bewaren en Verwacht"></option>
-                <option value="Bewaren en Publiceren"></option>
+                <option value=0>Bewaren</option>
+                <option value=1>Bewaren en Verwacht</option>
+                <option value=2>Bewaren en Publiceren</option>
             </datalist>
         </div>
         <button class="btn btn-danger" type="submit">Opslaan</button>
