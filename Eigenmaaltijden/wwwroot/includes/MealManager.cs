@@ -10,45 +10,40 @@ namespace Eigenmaaltijden.wwwroot.includes {
     
     public class Manager {
 
-        private MealForm _mealForm;
+        private Database db = Database.get();
         
         public Manager() { }
         
-        public MealForm Parse(IFormCollection postMethodData, string imagePath) {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <param name="imagePath"></param>
+        /// <returns></returns>
+        public MealForm Parse(IFormCollection collection, string imagePath) {
             int frozen = 0; // Standard False
-            int category = 0; // Standard Veganistisch
-            int availability = 0;
-            string[] keys = { "name", "desc", "ingredients", "frozen", "options", "date", "amount", "weight", "price", "saveoptions" };
-            if (postMethodData[keys[3]] == "true")
-                frozen = 1;
-            switch(postMethodData[keys[4]]) {
-                case "Veganisme Maaltijd":
-                    category = 0;
-                    break;
-                case "Vegetarische Maaltijd":
-                    category = 1;
-                    break;
-                case "Vlees Maaltijd":
-                    category = 2;
-                    break;
-            }
-            switch(postMethodData[keys[9]]) {
-                case "Bewaren":
-                    availability = 0;
-                    break;
-                case "Bewaren en Verwacht":
-                    availability = 1;
-                    break;
-                case "Bewaren en Publiceren":
-                    availability = 2;
-                    break;
-            }
-            this._mealForm = new MealForm(postMethodData[keys[0]], postMethodData[keys[1]], imagePath, postMethodData[keys[2]], frozen, category, Convert.ToDateTime(postMethodData[keys[5]]).Date.ToString("yyyy-MM-dd"), int.Parse(postMethodData[keys[6]]), int.Parse(postMethodData[keys[7]]), float.Parse(postMethodData[keys[8]]), availability);
-            return this._mealForm;
+            return new MealForm(
+                collection["name"], 
+                collection["desc"], 
+                imagePath,
+                collection["ingredients"],
+                frozen = (collection["fresh"] == "true") ? 1 : 0,
+                int.Parse(collection["category"]), 
+                Convert.ToDateTime(collection["date"]).Date.ToString("yyyy-MM-dd"),
+                int.Parse(collection["amount"]), 
+                int.Parse(collection["weight"]), 
+                float.Parse(collection["price"]), 
+                int.Parse(collection["saveoptions"])
+            );
         }
 
+        /// <summary>
+        /// This method creates a list of previews for already saved meals.
+        /// </summary>
+        /// <param name="uid">The UserID of the current User</param>
+        /// <returns>A list of Preview instances</returns>
         public List<Preview> GetMealPreviews(int uid) {
-            var connection = this.Connect();
+            var connection = db.Connect();
             List<Preview> mealsPreview = new List<Preview>();
             var listOfMeals = connection.Query<Meals>("SELECT * FROM maaltijden WHERE UserID=@uid", new { uid });
             foreach(var meal in listOfMeals)
@@ -56,47 +51,41 @@ namespace Eigenmaaltijden.wwwroot.includes {
             return mealsPreview;
         }
 
+        // public List<SearchPreview> GetMealPreviews(string searchKeyWord) {
+
+        // }
+
+        /// <summary>
+        /// Creates SavedMeal instance for updating already made meals.
+        /// </summary>
+        /// <param name="mealid">The ID of the meal request</param>
+        /// <returns>A SavedMeal instance</returns>
         public SavedMeal GetMeal(int mealid) {
-            var connection = this.Connect();
+            var connection = db.Connect();
+            string fresh = "";
             var currentMeal = connection.QuerySingle<Meals>("SELECT * FROM maaltijden WHERE MealID=@mealid", new { mealid });
             var currentMealInfo = connection.QuerySingle<MealInfo>("SELECT * FROM maaltijd_info WHERE MealID=@mealid", new { mealid });
-            string fresh = "checked";
-            string category = "";
-            string availability = "";
-            if (currentMealInfo.Fresh == 1)
-                fresh = "unchecked";
-            switch(currentMealInfo.Type) {
-                case 0:
-                    category = "Veganisme Maaltijd";
-                    break;
-                case 1:
-                    category = "Vegetarische Maaltijd";
-                    break;
-                case 2:
-                    category = "Vlees Maaltijd";
-                    break;
-            }
-            switch(currentMealInfo.Availability) {
-                case 0:
-                    availability = "Bewaren";
-                    break;
-                case 1:
-                    availability = "Bewaren en Verwacht";
-                    break;
-                case 2:
-                    availability = "Bewaren en Publiceren";
-                    break;
-            }
-            SavedMeal save = new SavedMeal(currentMeal.Name, currentMeal.Description, currentMeal.PhotoPath, fresh, category, currentMealInfo.PreparedOn.ToString("yyyy-MM-dd"), currentMealInfo.AmountAvailable, currentMealInfo.PortionWeight, currentMealInfo.PortionPrice, availability);
-            return save;
+            return new SavedMeal(
+                currentMeal.Name, 
+                currentMeal.Description, 
+                currentMeal.PhotoPath, 
+                fresh = (currentMealInfo.Fresh == 0) ? "checked" : "unchecked",
+                currentMealInfo.Type, 
+                currentMealInfo.PreparedOn.ToString("yyyy-MM-dd"), 
+                currentMealInfo.AmountAvailable, 
+                currentMealInfo.PortionWeight, 
+                currentMealInfo.PortionPrice, 
+                currentMealInfo.Availability
+            );
         }
 
-        private IDbConnection Connect() {
-            return new MySqlConnection(@"Server=localhost;Port=3306;Database=eigenmaaltijden;Uid=root;Pwd=;");
-        }
-
+        /// <summary>
+        /// Work in progress
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public bool ValidateMealName(string name) {
-            var connection = this.Connect();
+            var connection = db.Connect();
             try {
                 string result = connection.QuerySingle<string>("SELECT Name FROM maaltijden WHERE Name=@name", new { name });
             } catch(InvalidOperationException err) {
@@ -105,21 +94,43 @@ namespace Eigenmaaltijden.wwwroot.includes {
             return true;
         }
 
+        /// <summary>
+        /// Gets the MealID with from the given Meal Name
+        /// </summary>
+        /// <param name="uid"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         private int getMealID(int uid, string name) {
-            var connection = this.Connect();
+            var connection = db.Connect();
             int mealid = connection.QuerySingle<int>("SELECT MealID FROM maaltijden WHERE UserID=@uid AND Name=@name", new { uid, name });
             connection.Close();
             return mealid;
         }
 
+        /// <summary>
+        /// Inserts the formcollection data into the database
+        /// </summary>
+        /// <param name="meal">A struct with the collection data</param>
+        /// <param name="uid">The UserID of the current User</param>
         public void SaveToDatabase(MealForm meal, int uid) {
-            var connection = this.Connect();
-            connection.Execute("INSERT INTO maaltijden (UserID, Name, Description, PhotoPath) VALUES (@uid, @meal.Name, @meal.Description, @meal.ImagePath)", new { uid, meal.Name, meal.Description, meal.ImagePath });
+            var connection = db.Connect();
+            connection.Execute("INSERT INTO maaltijden (UserID, Name, Description, PhotoPath) VALUES (@uid, @name, @description, @imagePath)", new { 
+                uid, 
+                name = meal.Name, 
+                description = meal.Description, 
+                imagePath = meal.ImagePath 
+            });
             int mealid = this.getMealID(uid, meal.Name);
-            string queryToMaaltijdenInfo = $"INSERT INTO maaltijd_info (MealID, AmountAvailable, Type, PortionPrice, PortionWeight, Fresh, PreparedOn, Availability) VALUES (@mealid, @meal.Amount, @meal.Category, @meal.Price, @meal.Weight, @meal.Frozen, @meal.Date, @meal.Availability)";
-            string queryToIngredients = $"INSERT INTO maaltijd_ingredienten (MealID, Ingredient) VALUES (@mealid, @meal.Ingredients)";
-            connection.Execute("INSERT INTO maaltijd_info (MealID, AmountAvailable, Type, PortionPrice, PortionWeight, Fresh, PreparedOn, Availability) VALUES (@mealid, @meal.Amount, @meal.Category, @meal.Price, @meal.Weight, @meal.Frozen, @meal.Date, @meal.Availability)", new { mealid, meal.Amount, meal.Category, meal.Price, meal.Weight, meal.Frozen, meal.Date, meal.Availability });
-            connection.Execute($"INSERT INTO maaltijd_ingredienten (MealID, Ingredient) VALUES (@mealid, @meal.Ingredients)", new { mealid, meal.Ingredients });
+            connection.Execute("INSERT INTO maaltijd_info (MealID, AmountAvailable, Type, PortionPrice, PortionWeight, Fresh, PreparedOn, Availability) VALUES (@mealid, @amount, @category, @price, @weight, @frozen, @date, @availability)", new { 
+                mealid, 
+                amount = meal.Amount, category = meal.Category, 
+                price = meal.Price, 
+                weight = meal.Weight, 
+                frozen = meal.Frozen, 
+                date = meal.Date, 
+                availability = meal.Availability 
+            });
+            connection.Execute($"INSERT INTO maaltijd_ingredienten (MealID, Ingredient) VALUES (@mealid, @ingredients)", new { mealid, ingredients = meal.Ingredients });
         }
     }
 }  
