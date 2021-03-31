@@ -60,7 +60,7 @@ namespace Eigenmaaltijden.wwwroot.includes {
         /// </summary>
         /// <param name="mealid">The ID of the meal request</param>
         /// <returns>A SavedMeal instance</returns>
-        public SavedMeal GetMeal(int mealid) {
+        public SavedMeal GetMeal(string wwwroot, int mealid) {
             using var connection = db.Connect();
             string fresh = "";
             var currentMeal = connection.QuerySingle<Meals>("SELECT * FROM maaltijden WHERE MealID=@mealid", new { mealid });
@@ -68,6 +68,7 @@ namespace Eigenmaaltijden.wwwroot.includes {
             return new SavedMeal(
                 currentMeal.Name, 
                 currentMeal.Description, 
+                wwwroot + currentMeal.PhotoPath,
                 currentMeal.PhotoPath, 
                 fresh = (currentMealInfo.Fresh == 0) ? "checked" : "unchecked",
                 currentMealInfo.Type, 

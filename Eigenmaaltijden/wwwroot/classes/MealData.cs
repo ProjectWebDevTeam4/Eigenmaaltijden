@@ -33,6 +33,7 @@ namespace Eigenmaaltijden.wwwroot.classes {
     public struct SavedMeal {
         public string Name { get; set; }
         public string Description { get; set; }
+        public string AbsoluteImagePath { get; set; }
         public string ImagePath { get; set; }
         public string Frozen { get; set; }
         public int Category { get; set; }
@@ -42,8 +43,8 @@ namespace Eigenmaaltijden.wwwroot.classes {
         public float Price { get; set; }
         public int Availability { get; set; }
 
-        public SavedMeal(string name, string desc, string imagePath, string frozen, int category, string date, int amount, int weight, float price, int availability) {
-            this.Name = name; this.Description = desc; this.ImagePath = imagePath; this.Frozen = frozen; this.Category = category; this.Date = date; this.Amount = amount; this.Weight = weight; this.Price = price; this.Availability = availability;
+        public SavedMeal(string name, string desc, string absoluteImagePath, string imagePath, string frozen, int category, string date, int amount, int weight, float price, int availability) {
+            this.Name = name; this.Description = desc; this.AbsoluteImagePath = absoluteImagePath; this.ImagePath = imagePath; this.Frozen = frozen; this.Category = category; this.Date = date; this.Amount = amount; this.Weight = weight; this.Price = price; this.Availability = availability;
         }
 
     }

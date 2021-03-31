@@ -23,7 +23,6 @@ namespace EigenMaaltijd.Pages
         public IFormFile uploadedImage { get; set; }
         public List<Preview> Previews;
         public SavedMeal save;
-        private int mealid;
         
         private readonly IWebHostEnvironment _environment;
         private bool isLoggedIn { get; set; }
@@ -41,7 +40,7 @@ namespace EigenMaaltijd.Pages
         }
 
         private void initializeMealUpdate() {
-            this.save = this._manager.GetMeal(this.GetMealID());
+            this.save = this._manager.GetMeal(_environment.WebRootPath, this.GetMealID());
         }
 
         /// <summary>
@@ -59,18 +58,20 @@ namespace EigenMaaltijd.Pages
 
         public async Task OnPostAsync() {
             string[] extensions = { "png", "jpg", "jpeg", "svg" };
-            if (!extensions.Contains(uploadedImage.FileName.Split(".")[1])) {
+            if (!(uploadedImage is null) && !extensions.Contains(uploadedImage.FileName.Split(".")[1])) {
                 this.Previews = this._manager.GetMealPreviews(int.Parse(HttpContext.Session.GetString("uid"))); // Setting the Previews.
                 return;
             }
-            Console.WriteLine(this.GetMealID());
+            string fileName = (uploadedImage is null) ? "default.svg" : uploadedImage.FileName;
             if (this.GetMealID() != -1)
-                this._manager.UpdateToDatabase(this._manager.Parse(Request.Form, "/uploads/" + uploadedImage.FileName), this.GetMealID());
+                this._manager.UpdateToDatabase(this._manager.Parse(Request.Form, "/uploads/" + fileName), this.GetMealID());
             else
-                this._manager.SaveToDatabase(this._manager.Parse(Request.Form, "/uploads/" + uploadedImage.FileName), int.Parse(HttpContext.Session.GetString("uid")));
-            var exportPath = Path.Combine(_environment.WebRootPath, "uploads", uploadedImage.FileName);
-            using(Stream fileStream = new FileStream(exportPath, FileMode.Create))
-                await uploadedImage.CopyToAsync(fileStream);
+                this._manager.SaveToDatabase(this._manager.Parse(Request.Form, "/uploads/" + fileName), int.Parse(HttpContext.Session.GetString("uid")));
+            if (fileName != "default.svg") {
+                var exportPath = Path.Combine(_environment.WebRootPath, "uploads", uploadedImage.FileName);
+                using(Stream fileStream = new FileStream(exportPath, FileMode.Create))
+                    await uploadedImage.CopyToAsync(fileStream);
+            }
             this.Previews = this._manager.GetMealPreviews(int.Parse(HttpContext.Session.GetString("uid"))); // Setting the Previews.
             return;
         }
