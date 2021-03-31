@@ -7,7 +7,7 @@ namespace Eigenmaaltijden.wwwroot.classes {
         public string Description { get; set; }
         public string ImagePath { get; set; }
         public string Ingredients { get; set; }
-        public int Frozen { get; set; }
+        public int Fresh { get; set; }
         public int Category { get; set; }
         public string Date { get; set; }
         public int Amount { get; set; }
@@ -15,8 +15,8 @@ namespace Eigenmaaltijden.wwwroot.classes {
         public float Price { get; set; }
         public int Availability { get; set; }
 
-        public MealForm(string name, string description, string imagePath, string ingredients, int frozen, int category, string date, int amount, int weight, float price, int availability) {
-            this.Name = name; this.Description = description; this.ImagePath = imagePath; this.Ingredients = ingredients; this.Frozen = frozen; this.Category = category; this.Date = date; this.Amount = amount; this.Weight = weight; this.Price = price; this.Availability = availability;
+        public MealForm(string name, string description, string imagePath, string ingredients, int fresh, int category, string date, int amount, int weight, float price, int availability) {
+            this.Name = name; this.Description = description; this.ImagePath = imagePath; this.Ingredients = ingredients; this.Fresh = fresh; this.Category = category; this.Date = date; this.Amount = amount; this.Weight = weight; this.Price = price; this.Availability = availability;
         }
     }
 

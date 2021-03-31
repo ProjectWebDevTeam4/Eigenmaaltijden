@@ -21,13 +21,13 @@ namespace Eigenmaaltijden.wwwroot.includes {
         /// <param name="imagePath"></param>
         /// <returns></returns>
         public MealForm Parse(IFormCollection collection, string imagePath) {
-            int frozen = 0; // Standard False
+            int fresh = 0; // Standard False
             return new MealForm(
                 collection["name"], 
                 collection["desc"], 
                 imagePath,
                 collection["ingredients"],
-                frozen = (collection["fresh"] == "true") ? 1 : 0,
+                fresh = (collection["fresh"] == "true") ? 1 : 0,
                 int.Parse(collection["category"]), 
                 Convert.ToDateTime(collection["date"]).Date.ToString("yyyy-MM-dd"),
                 int.Parse(collection["amount"]), 
@@ -43,7 +43,7 @@ namespace Eigenmaaltijden.wwwroot.includes {
         /// <param name="uid">The UserID of the current User</param>
         /// <returns>A list of Preview instances</returns>
         public List<Preview> GetMealPreviews(int uid) {
-            var connection = db.Connect();
+            using var connection = db.Connect();
             List<Preview> mealsPreview = new List<Preview>();
             var listOfMeals = connection.Query<Meals>("SELECT * FROM maaltijden WHERE UserID=@uid", new { uid });
             foreach(var meal in listOfMeals)
@@ -61,7 +61,7 @@ namespace Eigenmaaltijden.wwwroot.includes {
         /// <param name="mealid">The ID of the meal request</param>
         /// <returns>A SavedMeal instance</returns>
         public SavedMeal GetMeal(int mealid) {
-            var connection = db.Connect();
+            using var connection = db.Connect();
             string fresh = "";
             var currentMeal = connection.QuerySingle<Meals>("SELECT * FROM maaltijden WHERE MealID=@mealid", new { mealid });
             var currentMealInfo = connection.QuerySingle<MealInfo>("SELECT * FROM maaltijd_info WHERE MealID=@mealid", new { mealid });
@@ -85,7 +85,7 @@ namespace Eigenmaaltijden.wwwroot.includes {
         /// <param name="name"></param>
         /// <returns></returns>
         public bool ValidateMealName(string name) {
-            var connection = db.Connect();
+            using var connection = db.Connect();
             try {
                 string result = connection.QuerySingle<string>("SELECT Name FROM maaltijden WHERE Name=@name", new { name });
             } catch(InvalidOperationException err) {
@@ -101,10 +101,30 @@ namespace Eigenmaaltijden.wwwroot.includes {
         /// <param name="name"></param>
         /// <returns></returns>
         private int getMealID(int uid, string name) {
-            var connection = db.Connect();
+            using var connection = db.Connect();
             int mealid = connection.QuerySingle<int>("SELECT MealID FROM maaltijden WHERE UserID=@uid AND Name=@name", new { uid, name });
             connection.Close();
             return mealid;
+        }
+
+        public void UpdateToDatabase(MealForm meal, int mealid) {
+            using var connection = db.Connect();
+            connection.Execute("UPDATE maaltijden SET Name=@name, Description=@description, PhotoPath=@photopath WHERE MealID=@id", new { 
+                name = meal.Name,
+                description = meal.Description,
+                photopath = meal.ImagePath,
+                id = mealid
+            });
+            connection.Execute("UPDATE maaltijd_info SET AmountAvailable=@amount, Type=@type, PortionPrice=@price, PortionWeight=@weight, Fresh=@fresh, PreparedOn=@date, Availability=@availability WHERE MealID=@id", new {
+                amount = meal.Amount,
+                type = meal.Category,
+                price = meal.Price,
+                weight = meal.Weight,
+                fresh = meal.Fresh,
+                date = meal.Date,
+                availability = meal.Availability,
+                id = mealid
+            });
         }
 
         /// <summary>
@@ -113,7 +133,7 @@ namespace Eigenmaaltijden.wwwroot.includes {
         /// <param name="meal">A struct with the collection data</param>
         /// <param name="uid">The UserID of the current User</param>
         public void SaveToDatabase(MealForm meal, int uid) {
-            var connection = db.Connect();
+            using var connection = db.Connect();
             connection.Execute("INSERT INTO maaltijden (UserID, Name, Description, PhotoPath) VALUES (@uid, @name, @description, @imagePath)", new { 
                 uid, 
                 name = meal.Name, 
@@ -123,10 +143,11 @@ namespace Eigenmaaltijden.wwwroot.includes {
             int mealid = this.getMealID(uid, meal.Name);
             connection.Execute("INSERT INTO maaltijd_info (MealID, AmountAvailable, Type, PortionPrice, PortionWeight, Fresh, PreparedOn, Availability) VALUES (@mealid, @amount, @category, @price, @weight, @frozen, @date, @availability)", new { 
                 mealid, 
-                amount = meal.Amount, category = meal.Category, 
+                amount = meal.Amount, 
+                category = meal.Category, 
                 price = meal.Price, 
                 weight = meal.Weight, 
-                frozen = meal.Frozen, 
+                frozen = meal.Fresh, 
                 date = meal.Date, 
                 availability = meal.Availability 
             });

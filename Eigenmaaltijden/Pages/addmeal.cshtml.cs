@@ -19,32 +19,29 @@ namespace EigenMaaltijd.Pages
 
         Database db = Database.get();
         Manager _manager = new Manager();
+
+        public IFormFile uploadedImage { get; set; }
         public List<Preview> Previews;
         public SavedMeal save;
-        public bool isLoggedIn { get; set; }
-        public IFormFile uploadedImage { get; set; }
+        private int mealid;
+        
         private readonly IWebHostEnvironment _environment;
+        private bool isLoggedIn { get; set; }
 
         public AddMeal(ILogger<AddMeal> logger, IWebHostEnvironment env) {
             _logger = logger;
             _environment = env;
         }
 
-        private void setMealUpdate() {
-            int mealid = 0;
-            string query = Request.QueryString.ToString();
-            switch (Request.QueryString.HasValue) {
-                case true:
-                    if (query.Length <= 1 || query.Split("=")[1].Length == 0) 
-                        return;
-                    mealid = int.Parse(query.Split("=")[1]);
-                    break;
-                case false:
-                    return;
+        private int GetMealID() {
+            if (Request.Query["meal"].ToString().Length == 0) {
+                return -1;
             }
-            this.save = this._manager.GetMeal(mealid);
-            Console.WriteLine(this.save.Description);
-            return;
+            return int.Parse(Request.Query["meal"]);
+        }
+
+        private void initializeMealUpdate() {
+            this.save = this._manager.GetMeal(this.GetMealID());
         }
 
         /// <summary>
@@ -56,20 +53,25 @@ namespace EigenMaaltijd.Pages
             if (!isLoggedIn)
                 return RedirectToPage("/Login");
             this.Previews = this._manager.GetMealPreviews(int.Parse(HttpContext.Session.GetString("uid")));
-            this.setMealUpdate();
+            if (this.GetMealID() != -1) this.initializeMealUpdate();
             return null;
         }
 
         public async Task OnPostAsync() {
-            this.Previews = this._manager.GetMealPreviews(int.Parse(HttpContext.Session.GetString("uid")));
             string[] extensions = { "png", "jpg", "jpeg", "svg" };
-            if (!extensions.Contains(uploadedImage.FileName.Split(".")[1]))
+            if (!extensions.Contains(uploadedImage.FileName.Split(".")[1])) {
+                this.Previews = this._manager.GetMealPreviews(int.Parse(HttpContext.Session.GetString("uid"))); // Setting the Previews.
                 return;
+            }
+            Console.WriteLine(this.GetMealID());
+            if (this.GetMealID() != -1)
+                this._manager.UpdateToDatabase(this._manager.Parse(Request.Form, "/uploads/" + uploadedImage.FileName), this.GetMealID());
+            else
+                this._manager.SaveToDatabase(this._manager.Parse(Request.Form, "/uploads/" + uploadedImage.FileName), int.Parse(HttpContext.Session.GetString("uid")));
             var exportPath = Path.Combine(_environment.WebRootPath, "uploads", uploadedImage.FileName);
             using(Stream fileStream = new FileStream(exportPath, FileMode.Create))
                 await uploadedImage.CopyToAsync(fileStream);
-            this._manager.SaveToDatabase(this._manager.Parse(Request.Form, "/uploads/" + uploadedImage.FileName), int.Parse(HttpContext.Session.GetString("uid")));
-            this.Previews = this._manager.GetMealPreviews(int.Parse(HttpContext.Session.GetString("uid")));
+            this.Previews = this._manager.GetMealPreviews(int.Parse(HttpContext.Session.GetString("uid"))); // Setting the Previews.
             return;
         }
     }
