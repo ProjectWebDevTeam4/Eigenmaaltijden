@@ -63,9 +63,10 @@ namespace EigenMaaltijd.Pages
                 return;
             }
             string fileName = (uploadedImage is null) ? "default.svg" : uploadedImage.FileName;
-            if (this.GetMealID() != -1)
-                this._manager.UpdateToDatabase(this._manager.Parse(Request.Form, "/uploads/" + fileName), this.GetMealID());
-            else
+            if (this.GetMealID() != -1) {
+                string filename = (fileName != "default.svg") ? "/uploads/" + fileName : null;
+                this._manager.UpdateToDatabase(this._manager.Parse(Request.Form, filename), this.GetMealID());
+            } else
                 this._manager.SaveToDatabase(this._manager.Parse(Request.Form, "/uploads/" + fileName), int.Parse(HttpContext.Session.GetString("uid")));
             if (fileName != "default.svg") {
                 var exportPath = Path.Combine(_environment.WebRootPath, "uploads", uploadedImage.FileName);

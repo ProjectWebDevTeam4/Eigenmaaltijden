@@ -20,7 +20,7 @@ namespace Eigenmaaltijden.wwwroot.includes {
         /// <param name="collection"></param>
         /// <param name="imagePath"></param>
         /// <returns></returns>
-        public MealForm Parse(IFormCollection collection, string imagePath) {
+        public MealForm Parse(IFormCollection collection, string imagePath = null) {
             int fresh = 0; // Standard False
             return new MealForm(
                 collection["name"], 
@@ -110,12 +110,13 @@ namespace Eigenmaaltijden.wwwroot.includes {
 
         public void UpdateToDatabase(MealForm meal, int mealid) {
             using var connection = db.Connect();
-            connection.Execute("UPDATE maaltijden SET Name=@name, Description=@description, PhotoPath=@photopath WHERE MealID=@id", new { 
+            connection.Execute("UPDATE maaltijden SET Name=@name, Description=@description WHERE MealID=@id", new { 
                 name = meal.Name,
                 description = meal.Description,
-                photopath = meal.ImagePath,
                 id = mealid
             });
+            if (meal.ImagePath is not null)
+                connection.Execute("UPDATE maaltijden SET PhotoPath=@photopath WHERE MealID=@id", new { photopath=meal.ImagePath, id=mealid });
             connection.Execute("UPDATE maaltijd_info SET AmountAvailable=@amount, Type=@type, PortionPrice=@price, PortionWeight=@weight, Fresh=@fresh, PreparedOn=@date, Availability=@availability WHERE MealID=@id", new {
                 amount = meal.Amount,
                 type = meal.Category,
