@@ -145,9 +145,9 @@ namespace Eigenmaaltijden.wwwroot.includes {
         /// <param name="uid"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        private int getMealID(int uid, string name) {
+        private int getMealID(int uid, string name, string description) {
             using var connection = db.Connect();
-            int mealid = connection.QuerySingle<int>("SELECT MealID FROM maaltijden WHERE UserID=@uid AND Name=@name", new { uid, name });
+            int mealid = connection.QuerySingle<int>("SELECT MealID FROM maaltijden WHERE UserID=@uid AND Name=@name AND Description=@description", new { uid, name, description });
             connection.Close();
             return mealid;
         }
@@ -188,7 +188,7 @@ namespace Eigenmaaltijden.wwwroot.includes {
                 description = meal.Description, 
                 imagePath = meal.ImagePath 
             });
-            int mealid = this.getMealID(uid, meal.Name);
+            int mealid = this.getMealID(uid, meal.Name, meal.Description);
             connection.Execute("INSERT INTO maaltijd_info (MealID, AmountAvailable, Type, PortionPrice, PortionWeight, Fresh, PreparedOn, Availability) VALUES (@mealid, @amount, @category, @price, @weight, @frozen, @date, @availability)", new { 
                 mealid, 
                 amount = meal.Amount, 
