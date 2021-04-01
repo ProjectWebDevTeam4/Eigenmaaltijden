@@ -27,7 +27,7 @@
                 <a class="col-4" href=@meal.Url>
                     <span class="col-4">
                         <p class="font-weight-bold text-danger header">@meal.Name</p>
-                        <img src="/images/EigenMaaltijdLogo.svg" alt="Image Not Found" width="50%" height=50%>   
+                        <img src="@meal.PhotoPath" alt="Image can't Be Loaded" width="50%" height=50%>
                     </span>
                 </a>
             }
@@ -37,11 +37,11 @@
     <form class="w-75 mx-auto mt-5" method="post" enctype="multipart/form-data">
         <div class="form-group">
             <label class="" for="name">Titel van de Maaltijd:</label>
-            <input type="text" class="form-control" placeholder="naam" name="name" value=@Model.save.Name>
+            <input type="text" class="form-control" placeholder="naam" name="name" value="@Model.save.Name">
         </div>
         <div class="form-group">
             <label for="desc">Beschrijving over de Maaltijd:</label>
-            <input type="text" class="form-control" placeholder="beschrijving" name="desc" value=@Model.save.Description>
+            <input type="text" class="form-control" placeholder="beschrijving" name="desc" value="@Model.save.Description">
             <small name="desc-limit" class="form-text text-muted">Limiet van 280 karakters.</small>
         </div>
         <div class="form-group input-group">
@@ -49,9 +49,10 @@
                 <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
             </div>
             <div class="custom-file">
-                <input type="file" class="custom-file-input" aria-describedby="inputGroupFileAddon01" asp-for="uploadedImage">
-                <label class="custom-file-label text-left" for="inputGroupFile01">Kies een afbeedling voor de Maaltijd...</label>
+                <input type="file" id="fileupload" class="custom-file-input" aria-describedby="inputGroupFileAddon01" asp-for="uploadedImage">
+                <label class="custom-file-label text-left" for="fileupload">Kies een afbeedling voor de Maaltijd...</label>
             </div>
+            <small name="fileupload-desc" class="form-text text-muted"></small>
         </div>
         <div class="form-group">
             <label for="ingredients">Ingrediënten:</label>
@@ -62,13 +63,13 @@
             <small name="ingredients-desc" class="form-text text-muted">Voeg de ingrediënten één voor één toe.</small>
         </div>
         <div class="form-check">
-            <input class="form-check-input" name="fresh" type="checkbox" checked=@Model.save.Frozen>
+            <input class="form-check-input" name="fresh" type="checkbox" checked="@Model.save.Frozen">
             <label class="form-check-label" for="fresh">Is het ingevroren?</label>
             <small name="fresh-desc" class="form-text text-muted">Tik op de box als de maaltijd is ingevroren.</small>
         </div>
         <div class="form-group mt-3">
             <label for="category">Categorie maaltijd:</label>
-            <input name="category" type="text" class="form-control" list="options" value=@Model.save.Category>
+            <input name="category" type="text" class="form-control" list="options" value="@Model.save.Category">
             <datalist id="options">
                 <option value=0>Veganistische Maaltijd</option>
                 <option value=1>Vegetarische Maaltijd</option>
@@ -78,7 +79,7 @@
         </div>
         <div class="form-group mt-3">
             <label for="date">Datum maaltijd bereid:</label>
-            <input type="date" name="date" class="form-control" value=@Model.save.Date>
+            <input type="date" name="date" class="form-control" value="@Model.save.Date">
         </div>
         <div class="form-group mt-4">
             <div class="form-group mt-2">

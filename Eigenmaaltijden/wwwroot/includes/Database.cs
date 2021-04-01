@@ -31,7 +31,7 @@ namespace Eigenmaaltijden.wwwroot.includes
         /// <returns>returns the connection to the database.</returns>
         public IDbConnection Connect()
         {
-            return new MySqlConnection(@"Server=localhost;Port=3306;Database=eigenmaaltijden;Uid=root;Pwd=;");
+            return new MySqlConnection(@"Server=localhost;Port=3306;Database=eigenmaaltijden;Uid=root;Pwd=NEWPASSWORD;");
         }
 
         /// <summary>
