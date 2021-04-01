@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Dapper;
 using Eigenmaaltijden.wwwroot.includes;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -39,6 +40,7 @@ namespace Eigenmaaltijden.Pages
         public List<Maaltijd> verwachttemaaltijd = new List<Maaltijd>();
 
 
+        public bool isLoggedIn { get; set; }
         Database db = Database.get();
 
         public void GetData()
@@ -88,9 +90,15 @@ namespace Eigenmaaltijden.Pages
             }
         }
         
-        public void OnGet()
+        public IActionResult OnGet()
         {
-            
+            isLoggedIn = db.loginCheck(HttpContext.Session.GetString("sessionid"), HttpContext.Session.GetString("uid"));
+            if (!isLoggedIn)
+            {
+                return RedirectToPage("/Login");
+            }
+            GetData();
+            return null;
         }
     }
 }

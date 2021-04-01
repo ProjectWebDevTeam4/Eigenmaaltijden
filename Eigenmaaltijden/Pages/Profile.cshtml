@@ -3,7 +3,6 @@
 
 @{
     ViewData["Title"] = "Profile";
-    Model.GetData();
 }
 <style>
     html{
@@ -32,9 +31,9 @@
     .gerecht {
         width: 45%;
         height: 150px;
-        float: left;
         margin-left: 0%;
         margin-right: 5%;
+        display: inline-block;
     }
     .title {
         font-size: 30px;
@@ -51,7 +50,28 @@
 
     .maaltijd-img {
         width:100%; 
-        height: 125px
+        height: 125px;
+    }
+    
+    .gerecht-container {
+        width: 100%;
+        height: 190px;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    
+    ::-webkit-scrollbar {
+        height: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: lightgrey;
+        border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: whitesmoke;
+        border-radius: 10px;
     }
 </style>
 <div class="row">
@@ -77,8 +97,8 @@
         </div>
     </div>
     <div id="gerechten-container" class="col-8">
-        <div id="mijnGerechten-container" style="width: 100%">
-            <p class="title">Mijn gerechten</p>
+        <p class="title">Mijn gerechten</p>
+        <div id="mijnGerechten-container" class="gerecht-container">
             @{
                 foreach (var maaltijd in Model.maaltijd)
                 {
@@ -89,8 +109,8 @@
                 }
             }
         </div>
-        <div id="verwachtteGerechten-container" style="width: 100%">
-            <p class="title">Mijn verwachtte gerechten</p>
+        <p class="title">Mijn verwachtte gerechten</p>
+        <div id="verwachtteGerechten-container" class="gerecht-container">
             @{
                 foreach (var maaltijd in Model.verwachttemaaltijd)
                 {
