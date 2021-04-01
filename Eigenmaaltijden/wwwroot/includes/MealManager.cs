@@ -51,6 +51,23 @@ namespace Eigenmaaltijden.wwwroot.includes {
             return mealsPreview;
         }
 
+        public List<Preview> GetMealsByName(string Name)
+        {
+            var connection = db.Connect();
+            List<Preview> mealsPreview = new List<Preview>();
+            var listOfMeals = connection.Query<Meals>($"SELECT * FROM maaltijden WHERE Name LIKE '{Name}%'");
+            foreach (var meal in listOfMeals)
+                mealsPreview.Add(new Preview($"/meal?meal={meal.MealID}", meal.Name, meal.PhotoPath, meal.Description));
+            return mealsPreview;
+        }
+
+
+        /// <summary>
+        /// Creates SavedMeal instance for updating already made meals.
+        /// </summary>
+        /// <param name="mealid">The ID of the meal request</param>
+        /// <returns>A SavedMeal instance</returns>
+
         // public List<SearchPreview> GetMealPreviews(string searchKeyWord) {
 
         // }
