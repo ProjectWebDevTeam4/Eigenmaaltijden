@@ -1,5 +1,6 @@
 using System;
 using Dapper;
+using System.Linq;
 using System.Data;
 using MySql.Data.MySqlClient;
 using Microsoft.AspNetCore.Http;
@@ -37,6 +38,40 @@ namespace Eigenmaaltijden.wwwroot.includes {
             );
         }
 
+        private string[] ParseIngredients(string ingredients) {
+            string[] listOfIngredients = ingredients.Split(", ");
+            foreach (var ingredient in listOfIngredients)
+                if (ingredient == "") listOfIngredients = listOfIngredients.Where(val => val != "").ToArray();
+            return listOfIngredients;
+        }
+
+        private string DisplayIngredients(IEnumerable<string> listOfIngredients) {
+            string ingredients = null;
+            foreach (var item in listOfIngredients) {
+                ingredients += item + ", ";
+            }
+            return ingredients;
+        }
+
+        private string[] UpdateIngredients(string ingredients, int mealid) {
+            using var connection = db.Connect();
+            List<string> listToInsert = new List<string>();
+            IEnumerable<string> getIngredients = connection.Query<string>("SELECT Ingredient FROM maaltijd_ingredienten WHERE MealID=@mealid", new { mealid });
+            string[] listOfIngredients = this.ParseIngredients(ingredients);
+            foreach(var ingredient in listOfIngredients) {
+                if (!getIngredients.Contains(ingredient)) 
+                    listToInsert.Add(ingredient);
+            }
+            foreach (var ingredient in getIngredients) {
+                if (!listOfIngredients.Contains(ingredient))
+                    connection.Execute("DELETE FROM maaltijd_ingredienten WHERE MealID=@mealid AND Ingredient=@ingredient", new { mealid, ingredient });
+            }
+            foreach (var item in listToInsert) {
+                Console.WriteLine(item);
+            }
+            return listToInsert.ToArray();
+        }
+
         /// <summary>
         /// This method creates a list of previews for already saved meals.
         /// </summary>
@@ -61,17 +96,6 @@ namespace Eigenmaaltijden.wwwroot.includes {
             return mealsPreview;
         }
 
-
-        /// <summary>
-        /// Creates SavedMeal instance for updating already made meals.
-        /// </summary>
-        /// <param name="mealid">The ID of the meal request</param>
-        /// <returns>A SavedMeal instance</returns>
-
-        // public List<SearchPreview> GetMealPreviews(string searchKeyWord) {
-
-        // }
-
         /// <summary>
         /// Creates SavedMeal instance for updating already made meals.
         /// </summary>
@@ -82,11 +106,13 @@ namespace Eigenmaaltijden.wwwroot.includes {
             string fresh = "";
             var currentMeal = connection.QuerySingle<Meals>("SELECT * FROM maaltijden WHERE MealID=@mealid", new { mealid });
             var currentMealInfo = connection.QuerySingle<MealInfo>("SELECT * FROM maaltijd_info WHERE MealID=@mealid", new { mealid });
+            var ingredients = connection.Query<string>("SELECT Ingredient FROM maaltijd_ingredienten WHERE MealID=@mealid", new { mealid });
             return new SavedMeal(
                 currentMeal.Name, 
                 currentMeal.Description, 
                 wwwroot + currentMeal.PhotoPath,
                 currentMeal.PhotoPath, 
+                this.DisplayIngredients(ingredients),
                 fresh = (currentMealInfo.Fresh == 0) ? "checked" : "unchecked",
                 currentMealInfo.Type, 
                 currentMealInfo.PreparedOn.ToString("yyyy-MM-dd"), 
@@ -144,6 +170,8 @@ namespace Eigenmaaltijden.wwwroot.includes {
                 availability = meal.Availability,
                 id = mealid
             });
+            foreach(var ingredient in this.UpdateIngredients(meal.Ingredients, mealid))
+                connection.Execute($"INSERT INTO maaltijd_ingredienten (MealID, Ingredient) VALUES (@mealid, @ingredients)", new { mealid, ingredients=ingredient });
         }
 
         /// <summary>
@@ -170,7 +198,8 @@ namespace Eigenmaaltijden.wwwroot.includes {
                 date = meal.Date, 
                 availability = meal.Availability 
             });
-            connection.Execute($"INSERT INTO maaltijd_ingredienten (MealID, Ingredient) VALUES (@mealid, @ingredients)", new { mealid, ingredients = meal.Ingredients });
+            foreach(var ingredient in this.ParseIngredients(meal.Ingredients))
+                connection.Execute($"INSERT INTO maaltijd_ingredienten (MealID, Ingredient) VALUES (@mealid, @ingredients)", new { mealid, ingredients=ingredient });
         }
     }
 }  

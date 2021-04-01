@@ -57,10 +57,9 @@
         <div class="form-group">
             <label for="ingredients">Ingrediënten:</label>
             <div class="input-group">
-                <input type="text" class="form-control w-75" placeholder="Ingrediënt..." name="ingredients">
-                <button type="button" class="btn btn-danger">Voeg toe</button>
+                <textarea type="text" rows=5 class="form-control" placeholder="Ingrediënt..." name="ingredients">@Model.save.Ingredients</textarea>
             </div>
-            <small name="ingredients-desc" class="form-text text-muted">Voeg de ingrediënten één voor één toe.</small>
+            <small name="ingredients-desc" class="form-text text-muted">Voeg de ingrediënten toe met een komma tussen de ingredienten. </small>
         </div>
         <div class="form-check">
             <input class="form-check-input" name="fresh" type="checkbox" checked="@Model.save.Frozen">
