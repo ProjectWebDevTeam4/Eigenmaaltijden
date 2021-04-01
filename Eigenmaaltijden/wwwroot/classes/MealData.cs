@@ -25,8 +25,15 @@ namespace Eigenmaaltijden.wwwroot.classes {
         public string Name { get; set; }
         public string PhotoPath { get; set; }
 
+        public string Description { get; set; }
+
         public Preview(string url, string name, string photoPath) {
-            this.Url = url; this.Name = name; this.PhotoPath = photoPath;
+            this.Url = url; this.Name = name; this.PhotoPath = photoPath; this.Description = "";
+        }
+
+        public Preview(string url, string name, string photoPath, string Description)
+        {
+            this.Url = url; this.Name = name; this.PhotoPath = photoPath; this.Description = Description;
         }
     }
 

@@ -123,7 +123,9 @@ namespace Eigenmaaltijden.Pages
                 // need id for user profile
                 int UserID = connection.QuerySingle<int>("SELECT UserID FROM verkoper WHERE Email=@Email AND Password=@Password", new { Email, Password});
                 string ProfilePhotoPath = "img/users/default.png"; // Sets profile picture to default (placeholder) picture.
+
                 connection.Execute("INSERT INTO verkoper_profiel (UserID, Name, ProfilePhotoPath, Description, EmailHidden) VALUES (@UserID, @Name, @ProfilePhotoPath, '', 0)", new { UserID, Name, ProfilePhotoPath });
+
                 connection.Execute("INSERT INTO verkoper_adres (UserID, Street, Number, Addon, City, Country, PostCode) VALUES (@UserID, @Street, @HouseNumber, @Addon, @City, @Country, @PostCode)", new { UserID, Street, HouseNumber, Addon, City, Country, PostCode});
 
                 return OnPostLogin();
