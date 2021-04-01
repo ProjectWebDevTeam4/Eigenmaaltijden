@@ -4,16 +4,94 @@
 @{
     
 }
+<style>
+    body{
+        width:100%;
+    }
+    .mealcontainer{
+        width:50%;
+        height:80%;
+    }
+    #mealImg {
+        width: 100%;
+        border: 1px #707070 solid;
+    }
+    #mealIngredients{
+        width:90%;
+        margin:0 auto;
+    }
+    #mealSeller{
+        width:30%;
+        height:50px;
+    }
+    #mealSeller {
+        width: 100%;
+        height: 50px;
+        float: right;
+    }
+    #sellerName {
+        float: right;
+        font-size: 25px;
+        margin: 5px;
+        color: #C1272D;
+    }
+    #sellerImg {
+        float: right;
+        height: 90%;
+        border: 1px black solid;
+        margin: 3px;
+        border-radius: 30px;
+    }
+    #mealText {
+        margin-left: 5%;
+        font-size: 16px;
+    }
+    #mealTitle {
+        margin-top: 30%;
+        font-weight: 700;
+        font-size: 40px;
+        color: #C1272D;
+    }
+    #ingredientsTitle {
+        margin-top: 10%;
+        font-weight: 700;
+        font-size: 30px;
+        color: #C1272D;
+    }
+    .buttono {
+        margin: 5%;
+        border-radius: 60px;
+        padding: 15px;
+        padding-left: 25px;
+        padding-right: 25px;
+        font-size: 25px;
+    }
 
-<!DOCTYPE html>
+</style>
+<div class="row justify-content-center" style="margin-top:5%">
+    <div class="mealcontainer col-lg-6">
+        <!--put meal img here-->
+        <img id="mealImg" src="~/images/Placeholder.svg" />
+    </div>
+    <div class="mealcontainer col-6">
+        <div id="mealSeller">
+            <!--put seller name,image & link to profile here-->
+            <img id="sellerImg" src="~/images/Placeholder.svg" />
+            <p id="sellerName">Lisanne Reilman</p>
 
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-<div>
-    
+        </div>
+        <div id="mealText">
+            <!--put meal name, description & specs here-->
+            <p id="mealTitle">Korean Noodles</p>
+            <p id="mealDescription" sty> Very gut noodles made by Lisanne</p>
+            <p id="mealSpecs">Porties: 5 <br /> Bereid op: 1 april 2021 <br /> Ten minste houdbaar tot: 8 april 2021 <br /> Bevat: varkensvlees, vis, rund, lam, ei, gluten</p>
+        </div>
+        <div id="mealIngredients">
+            <!--put meal ingredients here-->
+            <p id="ingredientsTitle">Ingredienten</p>
+            <p id="ingredienten">Noodles, Fishballs, Veggie balls, Japanese sausage, sliced beef or lamb , egg, tofu, </p>
+        </div>
+    </div>
+    <!--put order function here-->
+    <button class="btn-outline-danger buttono">BESTEL NU!</button>
 </div>
-</body>
-</html>
