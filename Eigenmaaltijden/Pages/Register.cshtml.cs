@@ -119,7 +119,7 @@ namespace Eigenmaaltijden.Pages
 
             if (connection.QuerySingle<int>("SELECT COUNT(*) FROM verkoper WHERE `Email`=@Email", new { Email } ) == 0)
             {
-                connection.Execute("INSERT INTO verkoper (Email, Password) VALUES (@Email, @Password)", new { Email, Password });
+                connection.Execute("INSERT INTO verkoper (Email, Password, SessionID) VALUES (@Email, @Password, '')", new { Email, Password });
                 // need id for user profile
                 int UserID = connection.QuerySingle<int>("SELECT UserID FROM verkoper WHERE Email=@Email AND Password=@Password", new { Email, Password});
                 string ProfilePhotoPath = "img/users/default.png"; // Sets profile picture to default (placeholder) picture.
