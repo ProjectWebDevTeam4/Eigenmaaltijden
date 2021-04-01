@@ -23,6 +23,7 @@ namespace Eigenmaaltijden.wwwroot.includes {
         /// <returns></returns>
         public MealForm Parse(IFormCollection collection, string imagePath = null) {
             int fresh = 0; // Standard False
+            DateTime date = (collection["date"] != "") ? Convert.ToDateTime(collection["date"]).Date : DateTime.Today;
             return new MealForm(
                 collection["name"], 
                 collection["desc"], 
@@ -30,7 +31,7 @@ namespace Eigenmaaltijden.wwwroot.includes {
                 collection["ingredients"],
                 fresh = (collection["fresh"] == "true") ? 1 : 0,
                 int.Parse(collection["category"]), 
-                Convert.ToDateTime(collection["date"]).Date.ToString("yyyy-MM-dd"),
+                date.ToString("yyyy-MM-dd"),
                 int.Parse(collection["amount"]), 
                 int.Parse(collection["weight"]), 
                 float.Parse(collection["price"]), 
