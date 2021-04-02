@@ -3,35 +3,54 @@
 @{
 }
 
-
-<!-- Login Card -->
+<!-- Register Card -->
 <div class="row justify-content-center">
     <div class="col-lg-6">
-        <div class="card bg-primary border">
-            <div class="card-header bg-primary text-light"><b>Login to Happy Brides</b></div>
+        <div class="card bg-danger border">
+            <div class="card-header bg-danger text-light"><b>Registreren bij Eigenmaaltijd</b></div>
             <div class="card-body bg-light">
 
-                <!-- Login Form -->
+                <!-- Register Form -->
                 <form method="post" asp-page="Register" asp-page-handler="register">
                     <div class="container-fluid col-11 text-secondary">
-                        <label for="email_address" style="margin-top: 2%;"><b>Name</b></label>
+
+                        <label for="email_address" style="margin-top: 2%;" required autofocus><b>Name</b></label>
                         <input type="text" class="form-control" placeholder="John" asp-for="@Model.Name" required autofocus>
 
                         <label for="email_address" style="margin-top: 2%;"><b>E-mail</b></label>
-                        <input type="text" class="form-control" placeholder="John" asp-for="@Model.Email" required autofocus>
+                        <input type="text" class="form-control" placeholder="John@doe.nl" asp-for="@Model.Email" required autofocus>
 
                         <label for="password" style="margin-top: 5%;"><b>Password</b></label>
                         <input type="password" class="form-control" placeholder="********" asp-for="@Model.Password" required>
 
-                        <label for="password" style="margin-top: 5%;"><b>Confirm Password</b></label>
+                        <label for="password" style="margin-top: 5%;"><b>Bevestig Wachtwoord</b></label>
                         <input type="password" class="form-control" placeholder="********" asp-for="@Model.ConfirmPassword" required>
 
-                        <label><b>I Accept the <a target="_blank" asp-page="/TOS">Terms Of Service</a></b></label>
+                        <label for="Straatnaam" style="margin-top: 5%;"><b>Straatnaam</b></label>
+                        <input type="text" class="form-control" placeholder="Molenweg" asp-for="@Model.Street" required>
+
+                        <label for="Huisnummer" style="margin-top: 5%;"><b>Huisnummer</b></label>
+                        <input type="number" class="form-control" placeholder="33" asp-for="@Model.HouseNumber" required>
+
+                        <label for="Toevoeging" style="margin-top: 5%;"><b>Toevoeging</b></label>
+                        <input type="text" class="form-control" placeholder="A" asp-for="@Model.Addon">
+
+                        <label for="Stad" style="margin-top: 5%;"><b>Stad</b></label>
+                        <input type="text" class="form-control" placeholder="Leeuwarden" asp-for="@Model.City" required>
+
+                        <label for="Land" style="margin-top: 5%;"><b>Land</b></label><br />
+                        <input type="text" class="form-control" placeholder="Nederland" asp-for="@Model.Country" required>
+                        <br />
+
+                        <label for="Postcode" style="margin-top: 5%;"><b>Postcode</b></label>
+                        <input type="text" class="form-control" placeholder="1234AB" asp-for="@Model.PostCode" required>
+                        <br />
+                        <label><b>I Accept the <a target="_blank" class="text-danger" asp-page="/TOS">Terms Of Service</a></b></label>
                         <input type="checkbox" asp-for="@Model.AcceptedTOS" />
                         <br />
-                        <input type="submit" value="Login" class="btn bg-primary text-light" />
-                        <p class="text-danger"><b>@Model.ErrorMessage</b></p>
+                        <input type="submit" value="Registeren" class="btn bg-danger text-light" />
 
+                        <p class="text-danger"><b>@Model.ErrorMessage</b></p>
 
                     </div>
                 </form>

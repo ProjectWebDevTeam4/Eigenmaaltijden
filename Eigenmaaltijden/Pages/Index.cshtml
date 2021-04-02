@@ -13,4 +13,10 @@
     {
         <h1 class="display-4">Welkom op EigenMaaltijd</h1>
     }
+
+
+    <form method="post" asp-page="Search" asp-page-handler="search">
+        <input name="searchValue" type="text" class="form-control" placeholder="Boerenkool" required autofocus>
+        <input type="submit" value="Zoek"/>
+    </form>
 </div>

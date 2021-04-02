@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Eigenmaaltijden.wwwroot.includes;
+@using Microsoft.AspNetCore.Http;
+@{
+    Database db = Database.get();
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -12,7 +17,7 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
                 <a asp-page="/Index"><img src="~/images/EigenMaaltijdLogo.svg" alt="img" width="48" height="48"></img></a>
-                <a class="navbar-brand text-danger ml-2" asp-area="" asp-page="/Index">EigenMaaltijd</a>
+                <a class="navbar-brand text-danger ml-2" style="color: #C1272D" asp-area="" asp-page="/Index">EigenMaaltijd</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -27,16 +32,32 @@
                         </li>
                     </ul>
                     <ul class="navbar-nav ml-auto">
-                        @* Het symbool voor het toevoegen van een maaltijd. *@
-                        @* <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-page="/Add"><img src="~/images/add_item.png" alt="img" width="24px" height="24px"></a>
-        </li> *@
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Register">Registeren</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Login">Login</a>
-                        </li>
+
+                        @if (db.GetLoggedInUser() != null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/addmeal"><img src="~/images/add_item.png" alt="img" width="24px" height="24px"></a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">@db.GetLoggedInUser().Name</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" asp-page="/Profile">Profiel</a>
+                                    <a class="dropdown-item" asp-page="/AccountSettings">Settings</a>
+                                    <a class="dropdown-item" asp-page="/Index" asp-page-handler="logout">Uitloggen</a>
+                                </div>
+                            </li>
+
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Register">Registeren</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Login">Login</a>
+                            </li>
+                        }
+
                     </ul>
                 </div>
             </div>
@@ -59,5 +80,6 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>
