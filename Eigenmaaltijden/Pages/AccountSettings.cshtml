@@ -61,13 +61,13 @@
                     <input type="text" class="form-control" value="@Model.db.GetLoggedInUser().Email" asp-for="@Model.Email" required autofocus>
 
                     <label style="margin-top: 2%;"><b>Huidig Wachtwoord</b></label>
-                    <input type="password" class="form-control" name="CurrentPasswrod" value="" placeholder='********' asp-for="@Model.CurrentPassword" />
+                    <input type="password" class="form-control" value="" placeholder='********' asp-for="@Model.CurrentPassword" />
 
                     <label style="margin-top: 2%;"><b>Nieuw Wachtwoord</b></label>
-                    <input type="password" class="form-control" name="Password" value="" placeholder='********' asp-for="@Model.NewPassword" />
+                    <input type="password" class="form-control" value="" placeholder='********' asp-for="@Model.NewPassword" />
 
                     <label style="margin-top: 2%;"><b>Bevestig Nieuw Wachtwoord</b></label>
-                    <input type="password" class="form-control" name="PasswordConfirm" value="" placeholder='********' asp-for="@Model.ConfirmNewPassword" />
+                    <input type="password" class="form-control" value="" placeholder='********' asp-for="@Model.ConfirmNewPassword" />
 
                     <input type="submit" class="btn" style="bottom: 25px; position: absolute; color: white; background-color: #C1272D" value="Wijzigingen Opslaan" />
                     <p class="text-danger"><b>@Model.ErrorMessage</b></p>
