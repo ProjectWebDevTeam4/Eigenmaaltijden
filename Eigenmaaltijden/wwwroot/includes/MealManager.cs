@@ -21,15 +21,14 @@ namespace Eigenmaaltijden.wwwroot.includes {
         /// <param name="collection"></param>
         /// <param name="imagePath"></param>
         /// <returns></returns>
-        public MealForm Parse(IFormCollection collection, string imagePath = null) {
-            int fresh = 0; // Standard False
+        public MealCollection Parse(IFormCollection collection, string imagePath = null) {
             DateTime date = (collection["date"] != "") ? Convert.ToDateTime(collection["date"]).Date : DateTime.Today;
-            return new MealForm(
+            return new MealCollection(
                 collection["name"], 
                 collection["desc"], 
                 imagePath,
                 collection["ingredients"],
-                fresh = (collection["fresh"] == "true") ? 1 : 0,
+                (collection["fresh"] == "true") ? 1 : 0,
                 int.Parse(collection["category"]), 
                 date.ToString("yyyy-MM-dd"),
                 int.Parse(collection["amount"]), 
@@ -86,12 +85,12 @@ namespace Eigenmaaltijden.wwwroot.includes {
 
         public List<Preview> GetMealsByName(string Name)
         {
-            var connection = db.Connect();
-            List<Preview> mealsPreview = new List<Preview>();
+            using var connection = db.Connect();
+            List<Preview> previews = new List<Preview>();
             var listOfMeals = connection.Query<CurrentMeal>($"SELECT MealID, Name, PhotoPath, Description FROM maaltijden WHERE Name LIKE '{Name}%'");
             foreach (var meal in listOfMeals)
-                mealsPreview.Add(new Preview($"/meal?meal={meal.MealID}", meal.Name, meal.PhotoPath, meal.Description));
-            return mealsPreview;
+                previews.Add(new Preview($"/meal?meal={meal.MealID}", meal.Name, meal.PhotoPath, meal.Description));
+            return previews;
         }
 
         /// <summary>
@@ -99,18 +98,17 @@ namespace Eigenmaaltijden.wwwroot.includes {
         /// </summary>
         /// <param name="mealid">The ID of the meal request</param>
         /// <returns>A SavedMeal instance</returns>
-        public SavedMeal GetMeal(string wwwroot, int mealid) {
+        public SaveCollection GetMeal(string wwwroot, int mealid) {
             using var connection = db.Connect();
-            string fresh = "";
             var currentMeal = connection.QuerySingle<CurrentMeal>("SELECT * FROM maaltijden m INNER JOIN maaltijd_info i ON m.MealID=i.MealID WHERE m.MealID=@id", new { id=mealid});
             var ingredients = connection.Query<string>("SELECT Ingredient FROM maaltijd_ingredienten WHERE MealID=@mealid", new { mealid });
-            return new SavedMeal(
+            return new SaveCollection(
                 currentMeal.Name, 
                 currentMeal.Description, 
                 wwwroot + currentMeal.PhotoPath,
                 currentMeal.PhotoPath, 
                 this.DisplayIngredients(ingredients),
-                fresh = (currentMeal.Fresh == 0) ? "checked" : "unchecked",
+                (currentMeal.Fresh == 0) ? "checked" : "unchecked",
                 currentMeal.Type, 
                 currentMeal.PreparedOn.ToString("yyyy-MM-dd"), 
                 currentMeal.AmountAvailable, 
@@ -118,21 +116,6 @@ namespace Eigenmaaltijden.wwwroot.includes {
                 currentMeal.PortionPrice, 
                 currentMeal.Availability
             );
-        }
-
-        /// <summary>
-        /// Work in progress
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public bool ValidateMealName(string name) {
-            using var connection = db.Connect();
-            try {
-                string result = connection.QuerySingle<string>("SELECT Name FROM maaltijden WHERE Name=@name", new { name });
-            } catch(InvalidOperationException err) {
-                return false;
-            }
-            return true;
         }
 
         /// <summary>
@@ -150,12 +133,11 @@ namespace Eigenmaaltijden.wwwroot.includes {
 
         public void DeleteFromDatabase(int mealid) {
             using var connection = db.Connect();
-            Console.WriteLine(mealid);
             connection.Execute("DELETE FROM maaltijden WHERE MealID=@id", new { id=mealid });
             return;
         }
 
-        public void UpdateToDatabase(MealForm meal, int mealid) {
+        public void UpdateToDatabase(MealCollection meal, int mealid) {
             using var connection = db.Connect();
             connection.Execute("UPDATE maaltijden SET Name=@name, Description=@description WHERE MealID=@id", new { 
                 name = meal.Name,
@@ -183,7 +165,7 @@ namespace Eigenmaaltijden.wwwroot.includes {
         /// </summary>
         /// <param name="meal">A struct with the collection data</param>
         /// <param name="uid">The UserID of the current User</param>
-        public void SaveToDatabase(MealForm meal, int uid) {
+        public void SaveToDatabase(MealCollection meal, int uid) {
             using var connection = db.Connect();
             connection.Execute("INSERT INTO maaltijden (UserID, Name, Description, PhotoPath) VALUES (@uid, @name, @description, @imagePath)", new { 
                 uid, 

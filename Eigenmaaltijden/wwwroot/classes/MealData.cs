@@ -2,7 +2,7 @@ using System;
 
 namespace Eigenmaaltijden.wwwroot.classes {
 
-    public struct MealForm {
+    public struct MealCollection {
         public string Name { get; set; }
         public string Description { get; set; }
         public string ImagePath { get; set; }
@@ -15,7 +15,7 @@ namespace Eigenmaaltijden.wwwroot.classes {
         public float Price { get; set; }
         public int Availability { get; set; }
 
-        public MealForm(string name, string description, string imagePath, string ingredients, int fresh, int category, string date, int amount, int weight, float price, int availability) {
+        public MealCollection(string name, string description, string imagePath, string ingredients, int fresh, int category, string date, int amount, int weight, float price, int availability) {
             this.Name = name; this.Description = description; this.ImagePath = imagePath; this.Ingredients = ingredients; this.Fresh = fresh; this.Category = category; this.Date = date; this.Amount = amount; this.Weight = weight; this.Price = price; this.Availability = availability;
         }
     }
@@ -37,7 +37,7 @@ namespace Eigenmaaltijden.wwwroot.classes {
         }
     }
 
-    public struct SavedMeal {
+    public struct SaveCollection {
         public string Name { get; set; }
         public string Description { get; set; }
         public string AbsoluteImagePath { get; set; }
@@ -51,7 +51,7 @@ namespace Eigenmaaltijden.wwwroot.classes {
         public float Price { get; set; }
         public int Availability { get; set; }
 
-        public SavedMeal(string name, string desc, string absoluteImagePath, string imagePath, string ingredients, string frozen, int category, string date, int amount, int weight, float price, int availability) {
+        public SaveCollection(string name, string desc, string absoluteImagePath, string imagePath, string ingredients, string frozen, int category, string date, int amount, int weight, float price, int availability) {
             this.Name = name; this.Description = desc; this.AbsoluteImagePath = absoluteImagePath; this.ImagePath = imagePath; this.Ingredients = ingredients; this.Frozen = frozen; this.Category = category; this.Date = date; this.Amount = amount; this.Weight = weight; this.Price = price; this.Availability = availability;
         }
 
@@ -63,17 +63,6 @@ namespace Eigenmaaltijden.wwwroot.classes {
         public string Name { get; set; }
         public string Description { get; set; }
         public string PhotoPath { get; set; }
-        public int AmountAvailable { get; set; }
-        public int Type { get; set; }
-        public float PortionPrice { get; set; }
-        public int PortionWeight { get; set; }
-        public int Fresh { get; set; }
-        public DateTime PreparedOn { get; set; }
-        public int Availability { get; set; }
-    }
-
-    public class MealInfo {
-        public int MealID { get; set; }
         public int AmountAvailable { get; set; }
         public int Type { get; set; }
         public float PortionPrice { get; set; }

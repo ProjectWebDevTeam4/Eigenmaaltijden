@@ -23,7 +23,7 @@ namespace EigenMaaltijd.Pages
 
         public IFormFile uploadedImage { get; set; }
         public List<Preview> Previews;
-        public SavedMeal save;
+        public SaveCollection save;
         
         private readonly IWebHostEnvironment _environment;
         private bool isLoggedIn { get; set; }
