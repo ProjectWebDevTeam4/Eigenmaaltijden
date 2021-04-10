@@ -4,26 +4,32 @@
     ViewData["Title"] = "Home page";
 }
 <style>
+
     body {
-        font-family: "Century Gothic";
+        @* font-family: "Century Gothic"; *@
     }
+
     .container {
-        max-width: 100% !important;
+        min-width: 100%;
     }
+     
     .mb-3 {
         margin-bottom: 0 !important;
     }
+
     #banner {
-        width: 100%;
+        max-width: 100%;
         display: inline-block;
         padding: 0;
     }
+
     #steps {
         background-color: lightgray;
         color: #C1272D;
         font-weight: 800;
         font-size: 24px;
     }
+
     .step {
         float: left;
         margin: 5%;
@@ -31,24 +37,29 @@
         margin-bottom: 0;
         text-align: center;
     }
+
     #stap1 {
         margin-left: 20%;
     }
+
     .arrow {
         float: left;
         margin: 4%;
     }
+
     .icon {
         width: 50px;
     }
+
     .inner-banner {
         z-index: 1000;
         position: absolute;
         left: 25%;
-        top: 45%;
+        top: 40%;
         display: flex;
         width: 50%;
     }
+    
     #search-btn {
         border-radius: 0px 20px 20px 0px; 
         width: 100px;
@@ -56,7 +67,6 @@
         color: #707070;
         border: none;
     }
-    
     
     .titleGerecht {
         text-align: center;
@@ -72,19 +82,19 @@
     }
     
     .gerecht-container {
-        width: 100%;
+        @* width: 100%; *@
         overflow-x: auto;
         white-space: nowrap;
         margin-top: 5%; 
         margin-left: 5%;
+        margin-right: 5%;
         padding-bottom: 15px;
     }
 
     .gerecht {
-        width: 23%;
+        width: 20%;
         height: 250px;
-        margin-left: 0%;
-        margin-right: 10%;
+        margin-right: 5%;
         display: inline-block;
     }
 
@@ -115,11 +125,13 @@
         background: whitesmoke;
         border-radius: 10px;
     }
+
 </style>
+
 <div class="row">
-    <div id="banner" class="col-12">
-        <img src="~/images/Fud.jpg" style="width: 100%" />
-        <img src="~/images/EigenMaaltijdLogo.svg" class="inner-banner" style="top: 8%; width: 15%; left: 43%"/>
+    <div id="banner" class="col-12 h-75">
+        <img src="~/images/Background1.jpg" style="width: 100%; height: 100%" />
+        <img src="~/images/EigenMaaltijdLogo.svg" class="inner-banner" style="top: 15%; width: 15%; left: 43%"/>
         <form method="post" asp-page="Search" asp-page-handler="search" class="inner-banner">
             <input name="searchValue" type="text" class="form-control" placeholder="Boerenkool" required autofocus style="border-radius: 20px 0px 0px 20px"/>
             <input type="submit" value="Zoek" id="search-btn"/>
@@ -141,7 +153,7 @@
             <img class="icon" src="~/images/icons/directions_car_filled_black_24dp.svg" />
         </div>
     </div>
-    <div id="PopulaireGerechten-container" class="col-12 gerecht-container">
+    <div id="PopulaireGerechten-container" class="col-sm w-75 gerecht-container">
         <p class="title">Uitgelichte gerechten</p>
          @{
              foreach (var maal in Model.maaltijd)
