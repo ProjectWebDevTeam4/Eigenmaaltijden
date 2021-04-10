@@ -57,12 +57,19 @@ namespace Eigenmaaltijden.wwwroot.classes {
 
     }
     
-    public class Meals {
+    public class CurrentMeal {
         public int MealID { get; set; }
         public int UserID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string PhotoPath { get; set; }
+        public int AmountAvailable { get; set; }
+        public int Type { get; set; }
+        public float PortionPrice { get; set; }
+        public int PortionWeight { get; set; }
+        public int Fresh { get; set; }
+        public DateTime PreparedOn { get; set; }
+        public int Availability { get; set; }
     }
 
     public class MealInfo {

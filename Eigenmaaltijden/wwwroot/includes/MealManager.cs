@@ -67,9 +67,6 @@ namespace Eigenmaaltijden.wwwroot.includes {
                 if (!listOfIngredients.Contains(ingredient))
                     connection.Execute("DELETE FROM maaltijd_ingredienten WHERE MealID=@mealid AND Ingredient=@ingredient", new { mealid, ingredient });
             }
-            foreach (var item in listToInsert) {
-                Console.WriteLine(item);
-            }
             return listToInsert.ToArray();
         }
 
@@ -81,7 +78,7 @@ namespace Eigenmaaltijden.wwwroot.includes {
         public List<Preview> GetMealPreviews(int uid) {
             using var connection = db.Connect();
             List<Preview> mealsPreview = new List<Preview>();
-            var listOfMeals = connection.Query<Meals>("SELECT * FROM maaltijden WHERE UserID=@uid", new { uid });
+            var listOfMeals = connection.Query<CurrentMeal>("SELECT MealID, Name, PhotoPath FROM maaltijden WHERE UserID=@uid", new { uid });
             foreach(var meal in listOfMeals)
                 mealsPreview.Add(new Preview($"/addmeal?meal={meal.MealID}", meal.Name, meal.PhotoPath));
             return mealsPreview;
@@ -91,7 +88,7 @@ namespace Eigenmaaltijden.wwwroot.includes {
         {
             var connection = db.Connect();
             List<Preview> mealsPreview = new List<Preview>();
-            var listOfMeals = connection.Query<Meals>($"SELECT * FROM maaltijden WHERE Name LIKE '{Name}%'");
+            var listOfMeals = connection.Query<CurrentMeal>($"SELECT MealID, Name, PhotoPath, Description FROM maaltijden WHERE Name LIKE '{Name}%'");
             foreach (var meal in listOfMeals)
                 mealsPreview.Add(new Preview($"/meal?meal={meal.MealID}", meal.Name, meal.PhotoPath, meal.Description));
             return mealsPreview;
@@ -105,8 +102,7 @@ namespace Eigenmaaltijden.wwwroot.includes {
         public SavedMeal GetMeal(string wwwroot, int mealid) {
             using var connection = db.Connect();
             string fresh = "";
-            var currentMeal = connection.QuerySingle<Meals>("SELECT * FROM maaltijden WHERE MealID=@mealid", new { mealid });
-            var currentMealInfo = connection.QuerySingle<MealInfo>("SELECT * FROM maaltijd_info WHERE MealID=@mealid", new { mealid });
+            var currentMeal = connection.QuerySingle<CurrentMeal>("SELECT * FROM maaltijden m INNER JOIN maaltijd_info i ON m.MealID=i.MealID WHERE m.MealID=@id", new { id=mealid});
             var ingredients = connection.Query<string>("SELECT Ingredient FROM maaltijd_ingredienten WHERE MealID=@mealid", new { mealid });
             return new SavedMeal(
                 currentMeal.Name, 
@@ -114,13 +110,13 @@ namespace Eigenmaaltijden.wwwroot.includes {
                 wwwroot + currentMeal.PhotoPath,
                 currentMeal.PhotoPath, 
                 this.DisplayIngredients(ingredients),
-                fresh = (currentMealInfo.Fresh == 0) ? "checked" : "unchecked",
-                currentMealInfo.Type, 
-                currentMealInfo.PreparedOn.ToString("yyyy-MM-dd"), 
-                currentMealInfo.AmountAvailable, 
-                currentMealInfo.PortionWeight, 
-                currentMealInfo.PortionPrice, 
-                currentMealInfo.Availability
+                fresh = (currentMeal.Fresh == 0) ? "checked" : "unchecked",
+                currentMeal.Type, 
+                currentMeal.PreparedOn.ToString("yyyy-MM-dd"), 
+                currentMeal.AmountAvailable, 
+                currentMeal.PortionWeight, 
+                currentMeal.PortionPrice, 
+                currentMeal.Availability
             );
         }
 
