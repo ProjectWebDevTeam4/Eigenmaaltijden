@@ -156,7 +156,7 @@
     <div id="PopulaireGerechten-container" class="col-sm w-75 gerecht-container">
         <p class="title">Uitgelichte gerechten</p>
          @{
-             foreach (var maal in Model.maaltijd)
+             foreach (var maal in @Model.maaltijd)
              {
                  <div class="profileBox gerecht" id="gerecht">
                      <p class="titleGerecht" id="title-gerecht">@maal.Name</p>

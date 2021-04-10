@@ -27,7 +27,7 @@
                 <a class="col-4" href=@meal.Url>
                     <span class="col-4">
                         <p class="font-weight-bold text-danger header">@meal.Name</p>
-                        <img src="/images/EigenMaaltijdLogo.svg" alt="Image Not Found" width="50%" height=50%>   
+                        <img src="@meal.PhotoPath" alt="Image can't Be Loaded" width="50%" height=50%>
                     </span>
                 </a>
             }
@@ -36,12 +36,12 @@
     <h1 class="text-danger mt-5">Creëer je EigenMaaltijd</h1>
     <form class="w-75 mx-auto mt-5" method="post" enctype="multipart/form-data">
         <div class="form-group">
-            <label class="" for="name">Titel van de Maaltijd:</label>
-            <input type="text" class="form-control" placeholder="naam" name="name" value=@Model.save.Name>
+            <label class="" for="name">Naam van de Maaltijd:</label>
+            <input type="text" class="form-control" placeholder="naam" name="name" value="@Model.save.Name">
         </div>
         <div class="form-group">
             <label for="desc">Beschrijving over de Maaltijd:</label>
-            <input type="text" class="form-control" placeholder="beschrijving" name="desc" value=@Model.save.Description>
+            <input type="text" class="form-control" placeholder="beschrijving" name="desc" value="@Model.save.Description">
             <small name="desc-limit" class="form-text text-muted">Limiet van 280 karakters.</small>
         </div>
         <div class="form-group input-group">
@@ -49,36 +49,36 @@
                 <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
             </div>
             <div class="custom-file">
-                <input type="file" class="custom-file-input" aria-describedby="inputGroupFileAddon01" asp-for="uploadedImage">
-                <label class="custom-file-label text-left" for="inputGroupFile01">Kies een afbeedling voor de Maaltijd...</label>
+                <input type="file" id="fileupload" class="custom-file-input" aria-describedby="inputGroupFileAddon01" asp-for="uploadedImage">
+                <label class="custom-file-label text-left" for="fileupload">Kies een afbeedling voor de Maaltijd...</label>
             </div>
+            <small name="fileupload-desc" class="form-text text-muted">Bij het aanpassen van een maaltijd zal de laatst gekozen afbeelding blijven staan, tenzij er een andere afbeelding geselecteerd word.</small>
         </div>
         <div class="form-group">
             <label for="ingredients">Ingrediënten:</label>
             <div class="input-group">
-                <input type="text" class="form-control w-75" placeholder="Ingrediënt..." name="ingredients">
-                <button type="button" class="btn btn-danger">Voeg toe</button>
+                <textarea type="text" rows=5 class="form-control" placeholder="Ingrediënt..." name="ingredients">@Model.save.Ingredients</textarea>
             </div>
-            <small name="ingredients-desc" class="form-text text-muted">Voeg de ingrediënten één voor één toe.</small>
+            <small name="ingredients-desc" class="form-text text-muted">Voeg de ingrediënten toe met een komma tussen de ingredienten. </small>
         </div>
         <div class="form-check">
-            <input class="form-check-input" name="frozen" type="checkbox" checked=@Model.save.Frozen>
-            <label class="form-check-label" for="frozen">Is het ingevroren?</label>
-            <small name="frozen-desc" class="form-text text-muted">Tik op de box als de maaltijd is ingevroren.</small>
+            <input class="form-check-input" name="fresh" type="checkbox" checked="@Model.save.Frozen">
+            <label class="form-check-label" for="fresh">Is het ingevroren?</label>
+            <small name="fresh-desc" class="form-text text-muted">Tik op de box als de maaltijd is ingevroren.</small>
         </div>
         <div class="form-group mt-3">
-            <label for="options">Categorie maaltijd:</label>
-            <input name="options" type="text" class="form-control" list="options" value=@Model.save.Category>
+            <label for="category">Categorie maaltijd:</label>
+            <input name="category" type="text" class="form-control" list="options" value="@Model.save.Category">
             <datalist id="options">
-                <option value="Veganisme Maaltijd"></option>
-                <option value="Vegetarische Maaltijd"></option>
-                <option value="Vlees Maaltijd"></option>
+                <option value=0>Veganistische Maaltijd</option>
+                <option value=1>Vegetarische Maaltijd</option>
+                <option value=2>Vlees Maaltijd</option>
             </datalist>
             <small name="desc-limit" class="form-text text-muted">Artikel over het <a href="https://ecowijs.nl/uitleg/verschil-tussen-vegetarisch-en-veganistisch-eten/">verschil</a> tussen veganisme en vegetarisch</small>
         </div>
         <div class="form-group mt-3">
             <label for="date">Datum maaltijd bereid:</label>
-            <input type="date" name="date" class="form-control" value=@Model.save.Date>
+            <input type="date" name="date" class="form-control" value="@Model.save.Date">
         </div>
         <div class="form-group mt-4">
             <div class="form-group mt-2">
@@ -100,11 +100,17 @@
         <div class="form-group mt-3">
             <input name="saveoptions" type="text" class="form-control" list="save" value=@Model.save.Availability>
             <datalist id="save">
-                <option value="Bewaren"></option>
-                <option value="Bewaren en Verwacht"></option>
-                <option value="Bewaren en Publiceren"></option>
+                <option value=0>Bewaren</option>
+                <option value=1>Bewaren en Verwacht</option>
+                <option value=2>Bewaren en Publiceren</option>
             </datalist>
         </div>
-        <button class="btn btn-danger" type="submit">Opslaan</button>
+        <div class="input-group justify-content-center">
+            <button class="btn btn-danger " type="submit">Opslaan</button>
+            @if (@Model.state) {
+                <p class="h-100 align-middle ml-2">Of</p>
+                <button class="btn btn-danger ml-2" asp-page-handler="delete" asp-route-meal=@Model.GetMealID()>Verwijderen...</button>
+            }
+        </div>
     </form>
 </div>
