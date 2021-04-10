@@ -36,7 +36,7 @@
     <h1 class="text-danger mt-5">Creëer je EigenMaaltijd</h1>
     <form class="w-75 mx-auto mt-5" method="post" enctype="multipart/form-data">
         <div class="form-group">
-            <label class="" for="name">Titel van de Maaltijd:</label>
+            <label class="" for="name">Naam van de Maaltijd:</label>
             <input type="text" class="form-control" placeholder="naam" name="name" value="@Model.save.Name">
         </div>
         <div class="form-group">
@@ -105,6 +105,12 @@
                 <option value=2>Bewaren en Publiceren</option>
             </datalist>
         </div>
-        <button class="btn btn-danger" type="submit">Opslaan</button>
+        <div class="input-group justify-content-center">
+            <button class="btn btn-danger " type="submit">Opslaan</button>
+            @if (@Model.state) {
+                <p class="h-100 align-middle ml-2">Of</p>
+                <button class="btn btn-danger ml-2" asp-page-handler="delete" asp-route-meal=@Model.GetMealID()>Verwijderen...</button>
+            }
+        </div>
     </form>
 </div>

@@ -152,6 +152,13 @@ namespace Eigenmaaltijden.wwwroot.includes {
             return mealid;
         }
 
+        public void DeleteFromDatabase(int mealid) {
+            using var connection = db.Connect();
+            Console.WriteLine(mealid);
+            connection.Execute("DELETE FROM maaltijden WHERE MealID=@id", new { id=mealid });
+            return;
+        }
+
         public void UpdateToDatabase(MealForm meal, int mealid) {
             using var connection = db.Connect();
             connection.Execute("UPDATE maaltijden SET Name=@name, Description=@description WHERE MealID=@id", new { 

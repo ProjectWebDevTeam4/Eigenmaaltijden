@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
@@ -26,13 +27,14 @@ namespace EigenMaaltijd.Pages
         
         private readonly IWebHostEnvironment _environment;
         private bool isLoggedIn { get; set; }
+        public bool state = false; // Create State -> false; Update State -> true;
 
         public AddMeal(ILogger<AddMeal> logger, IWebHostEnvironment env) {
             _logger = logger;
             _environment = env;
         }
 
-        private int GetMealID() {
+        public int GetMealID() {
             if (Request.Query["meal"].ToString().Length == 0) {
                 return -1;
             }
@@ -41,6 +43,13 @@ namespace EigenMaaltijd.Pages
 
         private void initializeMealUpdate() {
             this.save = this._manager.GetMeal(_environment.WebRootPath, this.GetMealID());
+            this.state = true;
+        }
+
+        public IActionResult OnPostDelete() {
+            this._manager.DeleteFromDatabase(this.GetMealID());
+            this.Previews = this._manager.GetMealPreviews(int.Parse(HttpContext.Session.GetString("uid"))); // Setting the Previews.
+            return RedirectToPage("/addmeal");
         }
 
         /// <summary>
