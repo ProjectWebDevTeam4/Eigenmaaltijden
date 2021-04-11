@@ -45,7 +45,7 @@ namespace Eigenmaaltijden.wwwroot.includes {
             return listOfIngredients;
         }
 
-        private string DisplayIngredients(IEnumerable<string> listOfIngredients) {
+        public string DisplayIngredients(IEnumerable<string> listOfIngredients) {
             string ingredients = null;
             foreach (var item in listOfIngredients) {
                 ingredients += item + ", ";
@@ -105,7 +105,6 @@ namespace Eigenmaaltijden.wwwroot.includes {
             return new SaveCollection(
                 currentMeal.Name, 
                 currentMeal.Description, 
-                wwwroot + currentMeal.PhotoPath,
                 currentMeal.PhotoPath, 
                 this.DisplayIngredients(ingredients),
                 (currentMeal.Fresh == 0) ? "checked" : "unchecked",

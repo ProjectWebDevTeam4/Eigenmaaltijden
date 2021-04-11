@@ -51,7 +51,7 @@ namespace Eigenmaaltijden.Pages
             ProfilePhotoPath = profile.ProfilePhotoPath;
         }
 
-        public void OnPostProfileSettings()
+        public IActionResult OnPostProfileSettings()
         {
             Name = Request.Form["username"];
             Description = Request.Form["about"];
@@ -69,6 +69,8 @@ namespace Eigenmaaltijden.Pages
                 DESCRIPTION = Description,
                 USERID = UserID
             });
+
+            return RedirectToPage("/Profile");
         }
         public async Task OnPostAsync() {
             var exportPath = Path.Combine(_environment.WebRootPath, "uploads", uploadedImage.FileName);

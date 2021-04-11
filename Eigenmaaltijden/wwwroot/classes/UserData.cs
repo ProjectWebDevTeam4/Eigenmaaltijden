@@ -30,4 +30,9 @@ namespace Eigenmaaltijden.wwwroot.classes
             this.PostCode = PostCode;
         }
     }
+
+    public class SellerData {
+        public uint UserID { get; set; }
+        public string Name { get; set; }
+    }
 }
