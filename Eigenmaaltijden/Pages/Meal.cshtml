@@ -14,7 +14,6 @@
     }
     #mealImg {
         width: 100%;
-        border: 1px #707070 solid;
     }
     #mealIngredients{
         width:90%;
@@ -38,7 +37,6 @@
     #sellerImg {
         float: right;
         height: 90%;
-        border: 1px black solid;
         margin: 3px;
         border-radius: 30px;
     }
@@ -47,13 +45,13 @@
         font-size: 16px;
     }
     #mealTitle {
-        margin-top: 30%;
+        margin-top: 25%;
         font-weight: 700;
         font-size: 40px;
         color: #C1272D;
     }
     #ingredientsTitle {
-        margin-top: 10%;
+        margin-top: 7%;
         font-weight: 700;
         font-size: 30px;
         color: #C1272D;
@@ -67,29 +65,41 @@
         font-size: 25px;
     }
 
+    .typeIcon {
+        width: 32px;
+        height: 32px;
+    }
 </style>
+
 <div class="row justify-content-center" style="margin-top:5%">
     <div class="mealcontainer col-lg-6">
         <!--put meal img here-->
-        <img id="mealImg" src="~/images/Placeholder.svg" />
+        <img id="mealImg" src="@Model.currentMeal.ImagePath" />
     </div>
     <div class="mealcontainer col-6">
-        <div id="mealSeller">
-            <!--put seller name,image & link to profile here-->
-            <img id="sellerImg" src="~/images/Placeholder.svg" />
-            <p id="sellerName">Lisanne Reilman</p>
-
-        </div>
+        <a href="@Model.seller[1]">
+            <div id="mealSeller">
+                <!--put seller name,image & link to profile here-->
+                <img id="sellerImg" src="~/images/Placeholder.svg" />
+                <p id="sellerName">@Model.seller[0]</p>
+            </div>
+        </a>
         <div id="mealText">
             <!--put meal name, description & specs here-->
-            <p id="mealTitle">Korean Noodles</p>
-            <p id="mealDescription" sty> Very gut noodles made by Lisanne</p>
-            <p id="mealSpecs">Porties: 5 <br /> Bereid op: 1 april 2021 <br /> Ten minste houdbaar tot: 8 april 2021 <br /> Bevat: varkensvlees, vis, rund, lam, ei, gluten</p>
+            <p id="mealTitle">@Model.currentMeal.Name</p>
+            <p id="mealDescription" sty>@Model.currentMeal.Description</p>
+            @if (@Model.currentMeal.Frozen == "Fresh") {
+                <img class="typeIcon" src="~/images/icons/fresh.png">
+            } else {
+                <img class="typeIcon" src="~/images/icons/frozen.png">
+            }
+            <p id="mealSpecs">Porties: @Model.currentMeal.Amount <br /> Gewicht Per Portie: @Model.currentMeal.Weight gram <br /> Bereid op: @Model.currentMeal.Date <br /> Type Maaltijd: @Model.TypeToString(@Model.currentMeal.Category)</p>
+            <p>Prijs Per Portie: €@Model.currentMeal.Price</p>
         </div>
         <div id="mealIngredients">
             <!--put meal ingredients here-->
             <p id="ingredientsTitle">Ingredienten</p>
-            <p id="ingredienten">Noodles, Fishballs, Veggie balls, Japanese sausage, sliced beef or lamb , egg, tofu, </p>
+            <p id="ingredienten">@Model.currentMeal.Ingredients</p>
         </div>
     </div>
     <!--put order function here-->

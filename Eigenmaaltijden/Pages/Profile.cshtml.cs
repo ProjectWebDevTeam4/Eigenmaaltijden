@@ -56,7 +56,7 @@ namespace Eigenmaaltijden.Pages
             Phone = profile.PhoneNumber;
             Intro = profile.Description;
 
-            var maaltijden = connection.Query("SELECT maaltijden.* FROM `maaltijden` INNER JOIN maaltijd_info ON maaltijd_info.MealID = maaltijden.MealID WHERE maaltijden.UserID = @UserID AND maaltijd_info.PreparedOn <= CAST(NOW() AS date)", new { UserID } );
+            var maaltijden = connection.Query("SELECT maaltijden.* FROM `maaltijden` INNER JOIN maaltijd_info ON maaltijd_info.MealID = maaltijden.MealID WHERE maaltijden.UserID = @UserID AND maaltijd_info.Availability=2", new { UserID } );
             
             if (maaltijden.AsList().Count > 0)
             {
@@ -72,7 +72,7 @@ namespace Eigenmaaltijden.Pages
                 }
             }
             
-            var verwachttemaaltijden = connection.Query("SELECT maaltijden.* FROM `maaltijden` INNER JOIN maaltijd_info ON maaltijd_info.MealID = maaltijden.MealID WHERE maaltijden.UserID =@UserID AND maaltijd_info.PreparedOn > CAST(NOW() AS date)", new { UserID } );
+            var verwachttemaaltijden = connection.Query("SELECT maaltijden.* FROM `maaltijden` INNER JOIN maaltijd_info ON maaltijd_info.MealID = maaltijden.MealID WHERE maaltijden.UserID =@UserID AND maaltijd_info.Availability=1", new { UserID } );
 
             
             if (maaltijden.AsList().Count > 0)
