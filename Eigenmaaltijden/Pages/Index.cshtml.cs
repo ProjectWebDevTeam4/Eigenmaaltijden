@@ -55,7 +55,7 @@ namespace EigenMaaltijd.Pages
         {
             using var connection = db.Connect();
             
-            var maaltijden = connection.Query("SELECT * FROM `maaltijden`");
+            var maaltijden = connection.Query("SELECT m.MealID, m.Name, m.PhotoPath FROM maaltijden m INNER JOIN maaltijd_info i ON m.MealID=i.MealID WHERE i.Availability=2 ORDER BY RAND() LIMIT 5");
             
             if (maaltijden.AsList().Count > 0)
             {
