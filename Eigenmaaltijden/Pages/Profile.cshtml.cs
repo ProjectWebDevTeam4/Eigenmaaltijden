@@ -28,25 +28,31 @@ namespace Eigenmaaltijden.Pages
         
         [BindProperty]
         public string Intro { get; set; }
+
+        public List<Maaltijd> maaltijd = new List<Maaltijd>();
+        
+        public List<Maaltijd> verwachttemaaltijd = new List<Maaltijd>();
+
+        public bool isLoggedIn { get; set; }
+        Database db = Database.get();
         
         public class Maaltijd {
             public int ID {get; set;}
             public string Name {get; set;}
             public string Image {get; set;}
-            
         }
-        public List<Maaltijd> maaltijd = new List<Maaltijd>();
-        
-        public List<Maaltijd> verwachttemaaltijd = new List<Maaltijd>();
 
+        private int GetUserID() {
+            if (Request.Query["id"].ToString().Length == 0) {
+                return -1;
+            }
+            return int.Parse(Request.Query["id"]);
+        }
 
-        public bool isLoggedIn { get; set; }
-        Database db = Database.get();
-
-        public void GetData()
+        public void GetData(int UserID)
         {
             using var connection = db.Connect();
-            uint UserID = db.GetLoggedInUser().UserID;
+            // uint UserID = db.GetLoggedInUser().UserID;
             var profile = connection.QuerySingle("SELECT verkoper.Email, verkoper_adres.City, verkoper_profiel.* FROM `verkoper_profiel` INNER JOIN verkoper ON verkoper.UserID = verkoper_profiel.UserID INNER JOIN verkoper_adres ON verkoper_adres.UserID = verkoper_profiel.UserID WHERE verkoper.UserID =@UserID", new { UserID });
 
             Pfp = profile.ProfilePhotoPath;
@@ -72,8 +78,7 @@ namespace Eigenmaaltijden.Pages
                 }
             }
             
-            var verwachttemaaltijden = connection.Query("SELECT maaltijden.* FROM `maaltijden` INNER JOIN maaltijd_info ON maaltijd_info.MealID = maaltijden.MealID WHERE maaltijden.UserID =@UserID AND maaltijd_info.Availability=1", new { UserID } );
-
+            var verwachttemaaltijden = connection.Query("SELECT maaltijden.* FROM `maaltijden` INNER JOIN maaltijd_info ON maaltijd_info.MealID = maaltijden.MealID WHERE maaltijden.UserID=@UserID AND maaltijd_info.Availability=1", new { UserID } );
             
             if (maaltijden.AsList().Count > 0)
             {
@@ -90,14 +95,17 @@ namespace Eigenmaaltijden.Pages
             }
         }
         
-        public IActionResult OnGet()
-        {
-            isLoggedIn = db.loginCheck(HttpContext.Session.GetString("sessionid"), HttpContext.Session.GetString("uid"));
-            if (!isLoggedIn)
-            {
-                return RedirectToPage("/Login");
+        public IActionResult OnGet() {
+            int userid = -1;
+            if (this.GetUserID() == -1) {
+                isLoggedIn = db.loginCheck(HttpContext.Session.GetString("sessionid"), HttpContext.Session.GetString("uid"));
+                if (!isLoggedIn)
+                    return RedirectToPage("/Login");
+                userid = int.Parse(HttpContext.Session.GetString("uid"));
+            } else {
+                userid = this.GetUserID();
             }
-            GetData();
+            GetData(userid);
             return null;
         }
     }
