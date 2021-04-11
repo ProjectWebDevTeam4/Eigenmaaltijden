@@ -37,7 +37,7 @@ namespace Eigenmaaltijden.Pages
         Database db = Database.get();
         
         public class Maaltijd {
-            public int ID {get; set;}
+            public string Url {get; set;}
             public string Name {get; set;}
             public string Image {get; set;}
         }
@@ -70,7 +70,7 @@ namespace Eigenmaaltijden.Pages
                 {
                     var list = new Maaltijd();
 
-                    list.ID = Convert.ToInt32(maal.MealID);
+                    list.Url = $"meal?meal={maal.MealID}";
                     list.Name = maal.Name;
                     list.Image = maal.PhotoPath;
                     
@@ -86,7 +86,7 @@ namespace Eigenmaaltijden.Pages
                 {
                     var list = new Maaltijd();
 
-                    list.ID = Convert.ToInt32(maal.MealID);
+                    list.Url = $"meal?meal={maal.MealID}";
                     list.Name = maal.Name;
                     list.Image = maal.PhotoPath;
                     
