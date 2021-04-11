@@ -87,7 +87,7 @@ namespace Eigenmaaltijden.wwwroot.includes {
         {
             using var connection = db.Connect();
             List<Preview> previews = new List<Preview>();
-            var listOfMeals = connection.Query<CurrentMeal>($"SELECT MealID, Name, PhotoPath, Description FROM maaltijden WHERE Name LIKE '{Name}%'");
+            var listOfMeals = connection.Query<CurrentMeal>($"SELECT m.MealID, m.Name, m.PhotoPath, Description FROM maaltijden m INNER JOIN maaltijd_info i ON m.MealID=i.MealID WHERE Name LIKE '{Name}%' AND Availability=2");
             foreach (var meal in listOfMeals)
                 previews.Add(new Preview($"/meal?meal={meal.MealID}", meal.Name, meal.PhotoPath, meal.Description));
             return previews;
