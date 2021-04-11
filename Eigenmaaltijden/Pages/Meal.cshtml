@@ -1,0 +1,107 @@
+﻿@page
+@model Eigenmaaltijden.Pages.Meal
+
+@{
+    
+}
+<style>
+    body{
+        width:100%;
+    }
+    .mealcontainer{
+        width:50%;
+        height:80%;
+    }
+    #mealImg {
+        width: 100%;
+    }
+    #mealIngredients{
+        width:90%;
+        margin:0 auto;
+    }
+    #mealSeller{
+        width:30%;
+        height:50px;
+    }
+    #mealSeller {
+        width: 100%;
+        height: 50px;
+        float: right;
+    }
+    #sellerName {
+        float: right;
+        font-size: 25px;
+        margin: 5px;
+        color: #C1272D;
+    }
+    #sellerImg {
+        float: right;
+        height: 90%;
+        margin: 3px;
+        border-radius: 30px;
+    }
+    #mealText {
+        margin-left: 5%;
+        font-size: 16px;
+    }
+    #mealTitle {
+        margin-top: 25%;
+        font-weight: 700;
+        font-size: 40px;
+        color: #C1272D;
+    }
+    #ingredientsTitle {
+        margin-top: 7%;
+        font-weight: 700;
+        font-size: 30px;
+        color: #C1272D;
+    }
+    .buttono {
+        margin: 5%;
+        border-radius: 60px;
+        padding: 15px;
+        padding-left: 25px;
+        padding-right: 25px;
+        font-size: 25px;
+    }
+
+    .typeIcon {
+        width: 32px;
+        height: 32px;
+    }
+</style>
+
+<div class="row justify-content-center" style="margin-top:5%">
+    <div class="mealcontainer col-lg-6">
+        <!--put meal img here-->
+        <img id="mealImg" src="@Model.currentMeal.ImagePath" />
+    </div>
+    <div class="mealcontainer col-6">
+        <a href="@Model.seller[1]">
+            <div id="mealSeller">
+                <!--put seller name,image & link to profile here-->
+                <img id="sellerImg" src="~/images/Placeholder.svg" />
+                <p id="sellerName">@Model.seller[0]</p>
+            </div>
+        </a>
+        <div id="mealText">
+            <!--put meal name, description & specs here-->
+            <p id="mealTitle">@Model.currentMeal.Name</p>
+            <p id="mealDescription" sty>@Model.currentMeal.Description</p>
+            @if (@Model.currentMeal.Frozen == "Fresh") {
+                <img class="typeIcon" src="~/images/icons/fresh.png">
+            } else {
+                <img class="typeIcon" src="~/images/icons/frozen.png">
+            }
+            <p id="mealSpecs">Porties: @Model.currentMeal.Amount <br /> Gewicht Per Portie: @Model.currentMeal.Weight gram <br /> Bereid op: @Model.currentMeal.Date <br /> Type Maaltijd: @Model.TypeToString(@Model.currentMeal.Category)</p>
+            <p>Prijs Per Portie: €@Model.currentMeal.Price</p>
+        </div>
+        <div id="mealIngredients">
+            <!--put meal ingredients here-->
+            <p id="ingredientsTitle">Ingredienten</p>
+            <p id="ingredienten">@Model.currentMeal.Ingredients</p>
+        </div>
+    </div>
+    <!--put order function here-->
+    <button class="btn-outline-danger buttono">BESTEL NU!</button>
+</div>

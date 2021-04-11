@@ -94,14 +94,15 @@ namespace Eigenmaaltijden.Pages
 
                 if (NewPassword != "")
                 {
-                    if (connection.QuerySingle<int>("SELECT COUNT(*) FROM verkoper WHERE `Email`=@Email AND `Password`=@CurrentPassword", new { Email, CurrentPassword }) == 0)
+                    if (connection.QuerySingle<int>("SELECT COUNT(*) FROM verkoper WHERE `Email`=@Email AND `Password`=@CurrentPassword", new { Email, CurrentPassword }) > 0)
                     {
                         connection.Execute("UPDATE `verkoper` SET `Password`=@NewPassword WHERE `Email`=@Email AND `Password`=@CurrentPassword", new { NewPassword, Email, CurrentPassword });
                     }
                     else
                     {
                         //Password isn't correct
-
+                        ErrorMessage = "Password not correct";
+                        return Page();
                     }
 
                 }
