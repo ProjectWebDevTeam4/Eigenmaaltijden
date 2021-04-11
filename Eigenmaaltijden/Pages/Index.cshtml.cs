@@ -20,7 +20,7 @@ namespace EigenMaaltijd.Pages
         public bool isLoggedIn { get; set; }
 
         public class Maaltijd {
-            public int ID {get; set;}
+            public string url {get; set;}
             public string Name {get; set;}
             public string Image {get; set;}
             
@@ -63,7 +63,7 @@ namespace EigenMaaltijd.Pages
                 {
                     var list = new Maaltijd();
 
-                    list.ID = Convert.ToInt32(maal.MealID);
+                    list.url = $"/meal?meal={maal.MealID}";
                     list.Name = maal.Name;
                     list.Image = maal.PhotoPath;
                     

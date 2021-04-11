@@ -125,6 +125,20 @@
         border-radius: 10px;
     }
 
+    .testimonial-group > .row {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .testimonial-group > .row > .col-4 {
+        display: inline-block;
+    }
+
+    .header {
+        border-bottom: 2px solid black;
+    }
+
 </style>
 
 <div class="row">
@@ -143,7 +157,7 @@
         </div>
         <img src="~/images/icons/arrow_forward_black_24dp.svg" class="arrow icon" />
         <div id="stap2" class="step">
-            <p>Reserveren</p>
+            <p>Bestellen</p>
             <img class="icon" src="~/images/icons/shopping_basket_black_24dp.svg" />
         </div>
         <img src="~/images/icons/arrow_forward_black_24dp.svg" class="arrow icon" />
@@ -152,16 +166,19 @@
             <img class="icon" src="~/images/icons/directions_car_filled_black_24dp.svg" />
         </div>
     </div>
-    <div id="PopulaireGerechten-container" class="col-sm w-75 gerecht-container">
-        <p class="title">Uitgelichte gerechten</p>
+    <div class="w-75 testimonial-group mx-auto mt-5">
+        <div class="row text-center">
          @{
              foreach (var maal in @Model.maaltijd)
              {
-                 <div class="profileBox gerecht" id="gerecht">
-                     <p class="titleGerecht" id="title-gerecht">@maal.Name</p>
-                     <div class="maaltijd-img" style='background-image: url("@maal.Image"); background-position: center; background-repeat: no-repeat; background-size: cover;'></div>
-                 </div>
+                <a class="col-4" href=@maal.url>
+                    <span class="col-4">
+                        <p class="font-weight-bold text-danger header">@maal.Name</p>
+                        <img src="@maal.Image" alt="Image can't Be Loaded" width="50%" height=50%>
+                    </span>
+                </a>
              }
          }
+         </div>
     </div>
 </div>
