@@ -78,7 +78,7 @@ namespace Eigenmaaltijden.Pages {
         {
             var client = new SendGridClient("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");
             var from = new EmailAddress("danisteunebrink@live.nl", "Dsteunebrink");
-            var to = new EmailAddress("dani.steunebrink@student.nhlstenden.com", "Dsteunebrink");
+            var to = new EmailAddress("mathijs.hoving@student.nhlstenden.com", "Dsteunebrink");
             var subject = "Er is een bestelling gemaakt!";
             var plainTextContent = "Beste Hobby Chef," + Environment.NewLine + Environment.NewLine +
                 "Er is een bestelling geplaatst op een maaltijd. Zorg ervoor dat deze maaltijd klaar is om opgehaald te worden!" + Environment.NewLine + Environment.NewLine +
@@ -96,7 +96,7 @@ namespace Eigenmaaltijden.Pages {
             var response = await client.SendEmailAsync(msg);
 
             from = new EmailAddress("danisteunebrink@live.nl", "Dsteunebrink");
-            to = new EmailAddress("dani.steunebrink@student.nhlstenden.com", "Dsteunebrink");
+            to = new EmailAddress("mathijs.hoving@student.nhlstenden.com", "Dsteunebrink");
             subject = "Je bestelling is ontvangen!";
             plainTextContent = "Beste Lezer," + Environment.NewLine + Environment.NewLine +
                 "Je bestelling is ontvangen door de chef. Deze zal zo snel mogelijk de bestelling klaar maken zodat je de kan ophalen." + Environment.NewLine + Environment.NewLine +
