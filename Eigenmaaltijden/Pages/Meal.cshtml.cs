@@ -116,6 +116,8 @@ namespace Eigenmaaltijden.Pages {
 
        public void OnPost() { 
             Execute().Wait();
+            this.currentMeal = this.GetCurrentmeal(this.GetMealID());
+            this.seller = this.GetSeller(this.GetMealID());
        }
 
         public IActionResult OnGet() {
