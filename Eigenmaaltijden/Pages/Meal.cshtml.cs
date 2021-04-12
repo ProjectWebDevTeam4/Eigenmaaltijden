@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Hosting;
 using Eigenmaaltijden.wwwroot.classes;
 using Eigenmaaltijden.wwwroot.includes;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace Eigenmaaltijden.Pages {
     public class Meal : PageModel {
@@ -71,6 +73,50 @@ namespace Eigenmaaltijden.Pages {
             }
             return null;
         }
+
+        static async Task Execute()
+        {
+            var client = new SendGridClient("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");
+            var from = new EmailAddress("danisteunebrink@live.nl", "Dsteunebrink");
+            var to = new EmailAddress("mathijs.hoving@student.nhlstenden.com", "Dsteunebrink");
+            var subject = "Er is een bestelling gemaakt!";
+            var plainTextContent = "Beste Hobby Chef," + Environment.NewLine + Environment.NewLine +
+                "Er is een bestelling geplaatst op een maaltijd. Zorg ervoor dat deze maaltijd klaar is om opgehaald te worden!" + Environment.NewLine + Environment.NewLine +
+                "Met vriendelijke groet," + Environment.NewLine +
+                "Eigemaaltijd Team";
+            var htmlContent = "";
+            var msg = MailHelper.CreateSingleEmail(
+                from,
+                to,
+                subject,
+                plainTextContent,
+                htmlContent
+            );
+
+            var response = await client.SendEmailAsync(msg);
+
+            from = new EmailAddress("danisteunebrink@live.nl", "Dsteunebrink");
+            to = new EmailAddress("mathijs.hoving@student.nhlstenden.com", "Dsteunebrink");
+            subject = "Je bestelling is ontvangen!";
+            plainTextContent = "Beste Lezer," + Environment.NewLine + Environment.NewLine +
+                "Je bestelling is ontvangen door de chef. Deze zal zo snel mogelijk de bestelling klaar maken zodat je de kan ophalen." + Environment.NewLine + Environment.NewLine +
+                "Met vriendelijke groet," + Environment.NewLine +
+                "Eigemaaltijd Team";
+            htmlContent = "";
+            msg = MailHelper.CreateSingleEmail(
+                from,
+                to,
+                subject,
+                plainTextContent,
+                htmlContent
+            );
+
+            response = await client.SendEmailAsync(msg);
+        }
+
+       public void OnPost() { 
+            Execute().Wait();
+       }
 
         public IActionResult OnGet() {
             if (this.GetMealID() == -1)
