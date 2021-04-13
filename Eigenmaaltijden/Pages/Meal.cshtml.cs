@@ -74,16 +74,20 @@ namespace Eigenmaaltijden.Pages {
             return null;
         }
 
-        static async Task Execute()
+        public async Task Execute()
         {
-            var client = new SendGridClient("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");
+            SaveCollection buyer = GetCurrentmeal(GetMealID());
+            var client = new SendGridClient("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");
             var from = new EmailAddress("danisteunebrink@live.nl", "Dsteunebrink");
-            var to = new EmailAddress("mathijs.hoving@student.nhlstenden.com", "Dsteunebrink");
+            var to = new EmailAddress("mathijs.hoving@student.nhlstenden.com", "Mhoving");
             var subject = "Er is een bestelling gemaakt!";
-            var plainTextContent = "Beste Hobby Chef," + Environment.NewLine + Environment.NewLine +
-                "Er is een bestelling geplaatst op een maaltijd. Zorg ervoor dat deze maaltijd klaar is om opgehaald te worden!" + Environment.NewLine + Environment.NewLine +
+            var plainTextContent = "Beste Hobby Kok," + Environment.NewLine + Environment.NewLine +
+                "Er is een bestelling geplaatst op de maaltijd " + buyer.Name + ". " + Environment.NewLine +
+                "Deze maaltijd zal op" + buyer.Availability + " beschikbaar komen. " + Environment.NewLine +
+                "Het e-mailadres van de besteller is danisteunebrink@live.nl deze heeft een portie besteld. " + Environment.NewLine + 
+                "Met het e-mailadres van de besteller kan je aangeven in welk tijdslot deze zijn portie mag ophalen." + Environment.NewLine + Environment.NewLine +
                 "Met vriendelijke groet," + Environment.NewLine +
-                "Eigemaaltijd Team";
+                "Eigemaaltijd Team!";
             var htmlContent = "";
             var msg = MailHelper.CreateSingleEmail(
                 from,
@@ -96,12 +100,15 @@ namespace Eigenmaaltijden.Pages {
             var response = await client.SendEmailAsync(msg);
 
             from = new EmailAddress("danisteunebrink@live.nl", "Dsteunebrink");
-            to = new EmailAddress("mathijs.hoving@student.nhlstenden.com", "Dsteunebrink");
+            to = new EmailAddress("mathijs.hoving@student.nhlstenden.com", "Mhoving");
             subject = "Je bestelling is ontvangen!";
-            plainTextContent = "Beste Lezer," + Environment.NewLine + Environment.NewLine +
-                "Je bestelling is ontvangen door de chef. Deze zal zo snel mogelijk de bestelling klaar maken zodat je de kan ophalen." + Environment.NewLine + Environment.NewLine +
+            plainTextContent = "Beste Mathijs," + Environment.NewLine + Environment.NewLine +
+                "Je bestelling is ontvangen door de kok. Je hebt de maaltijd " + buyer.Name + " besteld. " + Environment.NewLine +
+                "Deze zal zo snel mogelijk de bestelling klaar maken zodat je de kan ophalen. "  + Environment.NewLine  +
+                "De prijs van je maaltijd zal " + buyer.Price + " zijn. " +
+                "De kok zal aangeven waarneer je deze kan ophalen." + Environment.NewLine + Environment.NewLine +
                 "Met vriendelijke groet," + Environment.NewLine +
-                "Eigemaaltijd Team";
+                "Eigemaaltijd Team!";
             htmlContent = "";
             msg = MailHelper.CreateSingleEmail(
                 from,
