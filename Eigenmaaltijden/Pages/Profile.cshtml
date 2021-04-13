@@ -1,0 +1,140 @@
+﻿@page
+@model Eigenmaaltijden.Pages.Profile
+
+@{
+    ViewData["Title"] = "Profile";
+}
+<style>
+    html{
+        font-family: 'Century Gothic';
+    }
+    ul {
+        list-style-type: none;
+        padding:0px;
+    }
+
+    .profileBox {
+        background-color: white;
+        border: #707070 1px solid;
+        border-radius: 15px;
+        margin: 2.5%;
+        margin-top: 0%;
+    }
+    #pfp {
+        border-radius: 50%;
+        width: 50%;
+        margin: 5%;
+        margin-left: 25%;
+        border: 1px #707070 solid;
+    }
+
+    .title {
+        font-size: 30px;
+        font-weight: 600;
+        color: #C1272D;
+        width: 100%;
+    }
+
+    .titleGerecht {
+        text-align: center;
+        font-weight: 600;
+        border-bottom: 1px #707070 solid;
+        margin: 0 !important;
+        color: #C1272D;
+    }
+    .maaltijd-img {
+        width: 100%; 
+        height: 123px;
+        border-radius: 0px 0px 15px 15px;
+        object-fit: scale-down;
+    }
+    
+    .gerecht-container {
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+        margin-top: 5%; 
+        margin-left: 5%;
+        padding-bottom: 15px;
+    }
+    .gerecht {
+        width: 35%;
+        height: 150px;
+        margin-left: 0%;
+        margin-right: 5%;
+        display: inline-block;
+    }
+    .profileBox {
+        background-color: white;
+        border: #707070 1px solid;
+        border-radius: 15px;
+        margin-top: 0%;
+    }
+
+    ::-webkit-scrollbar {
+        height: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: lightgrey;
+        border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: whitesmoke;
+        border-radius: 10px;
+    }
+</style>
+
+<div class="row mt-5">
+    <div class="profileBox col-3" id="profile-container">
+        <div id="person" style="width:100%">
+            <img id="pfp" src="images/Placeholder.svg"/>
+            <p class="title" id="username" style="text-align:center">@Model.Name</p>
+        </div>
+        <hr/>
+        <div id="person-data">
+            <ul>
+                <li><p><img src="images/icons/place-24px.svg">  @Model.City</p></li>
+                <li><p><img src="images/icons/mail-24px.svg">  @Model.Email</p></li>
+            </ul>
+        </div>
+        <hr/>
+        <div id="person-intro">
+            <p class="title" style="font-size: 20px; text-align:center">Over mij</p>
+            <p>
+                @Model.Intro
+            </p>
+        </div>
+    </div>
+    <div id="gerechten-container" class="col-8">
+        <p class="title">Mijn gerechten</p>
+                <div id="mijnGerechten-container" class="gerecht-container">
+            @{
+                foreach (var maal in Model.maaltijd)
+                {
+                    <a href=@maal.Url>
+                        <div class="profileBox gerecht" id="gerecht">
+                            <p class="titleGerecht" id="title-gerecht" >@maal.Name</p>
+                            <div class="maaltijd-img" style='background-image: url("@maal.Image"); background-position: center; background-repeat: no-repeat; background-size: contain;'></div>
+                        </div>
+                    </a>   
+                }
+            }
+        </div>
+        <p class="title">Mijn verwachtte gerechten</p>
+        <div id="verwachtteGerechten-container" class="gerecht-container">
+            @{
+                foreach (var maal in Model.verwachttemaaltijd)
+                {
+                    <a href=@maal.Url>
+                        <div class="profileBox gerecht" id="gerecht">
+                            <p class="titleGerecht" id="title-gerecht">@maal.Name</p>
+                            <div class="maaltijd-img" style='background-image: url("@maal.Image"); background-position: center; background-repeat: no-repeat; background-size: contain;'></div>
+                        </div>
+                    </a>
+                }
+            }
+        </div>
+    </div>
+</div>

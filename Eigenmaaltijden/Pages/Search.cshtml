@@ -1,0 +1,53 @@
+﻿@page
+@model Eigenmaaltijden.Pages.SearchModel
+@{
+}
+
+<style>
+
+    .inner-banner {
+        z-index: 1000;
+        left: 25%;
+        top: 10%;
+        display: flex;
+        width: 100%;
+    }
+    
+    #search-btn {
+        border-radius: 0px 20px 20px 0px; 
+        width: 100px;
+        font-weight: 600;
+        color: #707070;
+        border: none;
+    }
+
+</style>
+
+<h2 class="text-danger mt-3 mb-4">@Model.mealsSearchResult.Count Maaltijden gevonden...</h2>
+
+<form method="post" asp-page="Search" asp-page-handler="search" class="inner-banner">
+    <input name="searchValue" type="text" class="form-control" placeholder="Boerenkool" required autofocus style="border-radius: 20px 0px 0px 20px"/>
+    <input type="submit" value="Zoek" id="search-btn"/>
+</form>
+
+<div class="list-group mt-5">
+    @foreach (var Preview in Model.mealsSearchResult)
+    {
+        <a href="@Preview.Url" class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="row rounded-circle">
+                <div class="col-1">
+                    <img class="w-100 h-100" src="@Preview.PhotoPath" alt="@Preview.Name" />
+                </div>
+                <div class="col-11">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">@Preview.Name</h5>
+                        <!--<l>~</!--ll>-->
+                    </div>
+                    <p class="mb-1">@Preview.Description</p>
+                </div>
+            </div>
+            
+        </a>
+        
+    }
+</div>
