@@ -126,7 +126,9 @@ namespace Eigenmaaltijden.Pages
 
                 connection.Execute("INSERT INTO verkoper_profiel (UserID, Name, ProfilePhotoPath, Description, EmailHidden) VALUES (@UserID, @Name, @ProfilePhotoPath, '', 0)", new { UserID, Name, ProfilePhotoPath });
 
-                connection.Execute("INSERT INTO verkoper_adres (UserID, Street, Number, Addon, City, Country, PostCode) VALUES (@UserID, @Street, @HouseNumber, @Addon, @City, @Country, @PostCode)", new { UserID, Street, HouseNumber, Addon, City, Country, PostCode});
+                connection.Execute(@"INSERT INTO verkoper_adres (UserID, Street, Number, Addon, City, Country, PostCode) 
+                                    VALUES (@UserID, @Street, @HouseNumber, @Addon, @City, @Country, @PostCode)", 
+                                    new { UserID, Street, HouseNumber, Addon, City, Country, PostCode});
 
                 return OnPostLogin();
             }
